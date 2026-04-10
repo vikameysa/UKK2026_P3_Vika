@@ -49,3 +49,4 @@ Route::post('/Siswa', [SiswaController::class, 'store'])->name('Siswa.store');
 Route::get('/Siswa/{id}/edit', [SiswaController::class, 'edit'])->name('Siswa.edit');
 Route::put('/Siswa/{id}', [SiswaController::class, 'update'])->name('Siswa.update');
 Route::delete('/Siswa/{id}', [SiswaController::class, 'destroy'])->name('Siswa.destroy');
+

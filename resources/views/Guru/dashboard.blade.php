@@ -48,10 +48,11 @@
                                 <td>{{ $g->no_hp }}</td>
                                 <td>
                                     <div class="d-flex gap-2">
-                                        <button type="button" class="btn btn-outline-primary btn-sm"
-                                            data-bs-toggle="modal" data-bs-target="#modalGuru{{ $g->id }}">
-                                            Detail
-                                        </button>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" 
+                                        data-toggle="modal" 
+                                        data-target="#modalDokter{{ $s->id }}">
+                                        View
+                                    </button>
                                         <a href="{{ route('Guru.edit', $g->id) }}"
                                             class="btn btn-outline-warning btn-sm">Edit</a>
                                         <form method="POST" action="{{ route('Guru.destroy', $g->id) }}">
@@ -73,15 +74,6 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body text-center">
-                                            @if($g->foto)
-                                                <img src="{{ asset('storage/'.$g->foto) }}"
-                                                    class="rounded mb-3"
-                                                    style="width:120px;height:120px;object-fit:cover;">
-                                            @else
-                                                <img src="{{ asset('assets/images/no-image.png') }}"
-                                                    class="rounded mb-3"
-                                                    style="width:120px;height:120px;object-fit:cover;">
-                                            @endif
                                             <p><strong>NIP:</strong> {{ $g->nip }}</p>
                                             <p><strong>Nama:</strong> {{ $g->nama }}</p>
                                             <p><strong>Mata Pelajaran:</strong> {{ $g->mata_pelajaran }}</p>

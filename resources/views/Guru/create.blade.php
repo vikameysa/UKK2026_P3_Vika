@@ -54,12 +54,6 @@
                             value="{{ old('no_hp') }}">
                         @error('no_hp')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Foto</label>
-                        <input type="file" name="foto" class="form-control @error('foto') is-invalid @enderror"
-                            accept="image/*">
-                        @error('foto')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Simpan</button>
                         <a href="{{ route('Guru.guru') }}" class="btn btn-secondary">Batal</a>

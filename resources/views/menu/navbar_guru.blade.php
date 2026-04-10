@@ -3,7 +3,7 @@
 
         <ul class="metismenu" id="menu">
 
-            <li class="nav-label">Dashboard</li>
+            <li class="nav-label">Dashboard Guru</li>
 
             <li>
                 <a href="{{ route('dashboard') }}">
