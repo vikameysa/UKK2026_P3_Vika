@@ -61,19 +61,6 @@
                             value="{{ old('no_hp', $siswa->no_hp) }}">
                         @error('no_hp')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Foto</label>
-                        @if($siswa->foto)
-                            <div class="mb-2">
-                                <img src="{{ asset('storage/'.$siswa->foto) }}"
-                                    style="width:80px;height:80px;object-fit:cover;border-radius:4px;">
-                            </div>
-                        @endif
-                        <input type="file" name="foto" class="form-control @error('foto') is-invalid @enderror"
-                            accept="image/*">
-                        <small class="text-muted">Kosongkan jika tidak ingin mengganti foto</small>
-                        @error('foto')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Update</button>
                         <a href="{{ route('Siswa.siswa') }}" class="btn btn-secondary">Batal</a>

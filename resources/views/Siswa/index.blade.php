@@ -20,7 +20,6 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Foto</th>
                                 <th>NIS</th>
                                 <th>Nama</th>
                                 <th>Kelas</th>
@@ -34,14 +33,6 @@
                             @forelse ($siswa as $s)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>
-                                    @if($s->foto)
-                                        <img src="{{ asset('storage/'.$s->foto) }}"
-                                            style="width:60px;height:60px;object-fit:cover;border-radius:4px;">
-                                    @else
-                                        <span class="text-muted">Tidak ada foto</span>
-                                    @endif
-                                </td>
                                 <td>{{ $s->nis }}</td>
                                 <td>{{ $s->nama }}</td>
                                 <td>{{ $s->kelas }}</td>
@@ -50,10 +41,12 @@
                                 <td>{{ $s->no_hp }}</td>
                                 <td>
                                     <div class="d-flex gap-2">
-                                        <button type="button" class="btn btn-outline-primary btn-sm"
-                                            data-bs-toggle="modal" data-bs-target="#modalSiswa{{ $s->id }}">
-                                            Detail
-                                        </button>
+                                        <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" 
+                                        data-toggle="modal" 
+                                        data-target="#modalSiswa{{ $s->id }}">
+                                        Detail
+                                    </button>
                                         <a href="{{ route('Siswa.edit', $s->id) }}"
                                             class="btn btn-outline-warning btn-sm">Edit</a>
                                         <form method="POST" action="{{ route('Siswa.destroy', $s->id) }}">
@@ -75,15 +68,6 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body text-center">
-                                            @if($s->foto)
-                                                <img src="{{ asset('storage/'.$s->foto) }}"
-                                                    class="rounded mb-3"
-                                                    style="width:120px;height:120px;object-fit:cover;">
-                                            @else
-                                                <img src="{{ asset('assets/images/no-image.png') }}"
-                                                    class="rounded mb-3"
-                                                    style="width:120px;height:120px;object-fit:cover;">
-                                            @endif
                                             <p><strong>NIS:</strong> {{ $s->nis }}</p>
                                             <p><strong>Nama:</strong> {{ $s->nama }}</p>
                                             <p><strong>Kelas:</strong> {{ $s->kelas }}</p>
