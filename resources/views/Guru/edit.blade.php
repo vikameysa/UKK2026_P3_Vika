@@ -1,80 +1,54 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Edit Data Guru</h4>
+<div class="card">
+    <div class="card-body">
 
-                <form action="{{ route('Guru.update', $guru->id) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <div class="mb-3">
-                        <label class="form-label">NIP</label>
-                        <input type="text" name="nip" class="form-control @error('nip') is-invalid @enderror"
-                            value="{{ old('nip', $guru->nip) }}">
-                        @error('nip')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nama</label>
-                        <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror"
-                            value="{{ old('nama', $guru->nama) }}">
-                        @error('nama')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Mata Pelajaran</label>
-                        <input type="text" name="mata_pelajaran" class="form-control @error('mata_pelajaran') is-invalid @enderror"
-                            value="{{ old('mata_pelajaran', $guru->mata_pelajaran) }}">
-                        @error('mata_pelajaran')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Jenis Kelamin</label>
-                        <select name="jenis_kelamin" class="form-select @error('jenis_kelamin') is-invalid @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="L" {{ old('jenis_kelamin', $guru->jenis_kelamin) == 'L' ? 'selected' : '' }}>Laki-laki</option>
-                            <option value="P" {{ old('jenis_kelamin', $guru->jenis_kelamin) == 'P' ? 'selected' : '' }}>Perempuan</option>
-                        </select>
-                        @error('jenis_kelamin')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Tanggal Lahir</label>
-                        <input type="date" name="tanggal_lahir" class="form-control @error('tanggal_lahir') is-invalid @enderror"
-                            value="{{ old('tanggal_lahir', $guru->tanggal_lahir) }}">
-                        @error('tanggal_lahir')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Alamat</label>
-                        <textarea name="alamat" class="form-control @error('alamat') is-invalid @enderror"
-                            rows="3">{{ old('alamat', $guru->alamat) }}</textarea>
-                        @error('alamat')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">No HP</label>
-                        <input type="text" name="no_hp" class="form-control @error('no_hp') is-invalid @enderror"
-                            value="{{ old('no_hp', $guru->no_hp) }}">
-                        @error('no_hp')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Foto</label>
-                        @if($guru->foto)
-                            <div class="mb-2">
-                                <img src="{{ asset('storage/'.$guru->foto) }}"
-                                    style="width:80px;height:80px;object-fit:cover;border-radius:4px;">
-                            </div>
-                        @endif
-                        <input type="file" name="foto" class="form-control @error('foto') is-invalid @enderror"
-                            accept="image/*">
-                        <small class="text-muted">Kosongkan jika tidak ingin mengganti foto</small>
-                        @error('foto')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary">Update</button>
-                        <a href="{{ route('Guru.guru') }}" class="btn btn-secondary">Batal</a>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <h4>Edit Guru</h4>
+
+        <form action="{{ route('Guru.update', $guru->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+
+            <input name="nip" value="{{ $guru->nip }}" class="form-control mb-2">
+            <input name="nama" value="{{ $guru->nama }}" class="form-control mb-2">
+            <input name="mata_pelajaran" value="{{ $guru->mata_pelajaran }}" class="form-control mb-2">
+
+            <select name="jenis_kelamin" class="form-control mb-2">
+                <option value="L" {{ $guru->jenis_kelamin == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                <option value="P" {{ $guru->jenis_kelamin == 'P' ? 'selected' : '' }}>Perempuan</option>
+            </select>
+
+            <input type="date" name="tanggal_lahir"
+                value="{{ \Carbon\Carbon::parse($guru->tanggal_lahir)->format('Y-m-d') }}"
+                class="form-control mb-2">
+
+            <input name="no_hp" value="{{ $guru->no_hp }}" class="form-control mb-2">
+
+            <textarea name="alamat" class="form-control mb-2">{{ $guru->alamat }}</textarea>
+
+            <input name="email" value="{{ $guru->email }}" class="form-control mb-2">
+
+            <input name="password" type="password" class="form-control mb-2">
+
+            {{-- KOLOM KANAN - FOTO --}}
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Foto Saat Ini</label>
+                                                        <div class="mb-3 text-center">
+                                                            <img src="{{ $guru->foto ? asset($guru->foto) : asset('assets/images/guru/') }}"
+                                                                width="120" height="120"
+                                                                style="border-radius:50%; object-fit:cover; border:3px solid #ddd;">
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <label class="form-label">Ganti Foto</label>
+                                                            <input type="file" name="foto" class="form-control" accept="image/*">
+                                                            <small class="text-muted">Kosongkan jika tidak ingin mengganti. Maks 2MB.</small>
+                                                        </div>
+                                                    </div>
+
+            <button class="btn btn-primary">Update</button>
+        </form>
+
     </div>
 </div>
 @endsection

@@ -10,61 +10,81 @@
                 <form action="{{ route('Siswa.update', $siswa->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <div class="mb-3">
-                        <label class="form-label">NIS</label>
-                        <input type="text" name="nis" class="form-control @error('nis') is-invalid @enderror"
-                            value="{{ old('nis', $siswa->nis) }}">
-                        @error('nis')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nama</label>
-                        <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror"
-                            value="{{ old('nama', $siswa->nama) }}">
-                        @error('nama')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Kelas</label>
-                        <input type="text" name="kelas" class="form-control @error('kelas') is-invalid @enderror"
-                            value="{{ old('kelas', $siswa->kelas) }}">
-                        @error('kelas')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Jurusan</label>
-                        <input type="text" name="jurusan" class="form-control @error('jurusan') is-invalid @enderror"
-                            value="{{ old('jurusan', $siswa->jurusan) }}">
-                        @error('jurusan')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Jenis Kelamin</label>
-                        <select name="jenis_kelamin" class="form-select @error('jenis_kelamin') is-invalid @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="L" {{ old('jenis_kelamin', $siswa->jenis_kelamin) == 'L' ? 'selected' : '' }}>Laki-laki</option>
-                            <option value="P" {{ old('jenis_kelamin', $siswa->jenis_kelamin) == 'P' ? 'selected' : '' }}>Perempuan</option>
-                        </select>
-                        @error('jenis_kelamin')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Tanggal Lahir</label>
-                        <input type="date" name="tanggal_lahir" class="form-control @error('tanggal_lahir') is-invalid @enderror"
-                            value="{{ old('tanggal_lahir', $siswa->tanggal_lahir) }}">
-                        @error('tanggal_lahir')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Alamat</label>
-                        <textarea name="alamat" class="form-control @error('alamat') is-invalid @enderror"
-                            rows="3">{{ old('alamat', $siswa->alamat) }}</textarea>
-                        @error('alamat')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">No HP</label>
-                        <input type="text" name="no_hp" class="form-control @error('no_hp') is-invalid @enderror"
-                            value="{{ old('no_hp', $siswa->no_hp) }}">
-                        @error('no_hp')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="d-flex gap-2">
+
+                    <div class="row">
+
+                        {{-- KOLOM KIRI --}}
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">NIS</label>
+                                <input type="text" name="nis" value="{{ $siswa->nis }}" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nama</label>
+                                <input type="text" name="nama" value="{{ $siswa->nama }}" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Kelas</label>
+                                <input type="text" name="kelas" value="{{ $siswa->kelas }}" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Jurusan</label>
+                                <input type="text" name="jurusan" value="{{ $siswa->jurusan }}" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Jenis Kelamin</label>
+                                <select name="jenis_kelamin" class="form-control" required>
+                                    <option value="L" {{ $siswa->jenis_kelamin == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                                    <option value="P" {{ $siswa->jenis_kelamin == 'P' ? 'selected' : '' }}>Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Tanggal Lahir</label>
+                                <input type="date" name="tanggal_lahir"
+                                    value="{{ $siswa->tanggal_lahir ? \Carbon\Carbon::parse($siswa->tanggal_lahir)->format('Y-m-d') : '' }}"
+                                    class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">No HP</label>
+                                <input type="text" name="no_hp" value="{{ $siswa->no_hp }}" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Alamat</label>
+                                <textarea name="alamat" class="form-control" rows="2" required>{{ $siswa->alamat }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" value="{{ $siswa->email }}" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                                <small class="text-muted">Minimal 6 karakter</small>
+                            </div>
+                        </div>
+
+                        {{-- KOLOM KANAN - FOTO --}}
+                        <div class="col-md-6">
+                            <label class="form-label">Foto Saat Ini</label>
+                            <div class="mb-3 text-center">
+<img src="{{ $siswa->foto ? asset($siswa->foto) : '' }}"
+     width="120" height="120"
+     style="border-radius:50%; object-fit:cover; border:3px solid #ddd;">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ganti Foto</label>
+                                <input type="file" name="foto" class="form-control" accept="image/*">
+                                <small class="text-muted">Kosongkan jika tidak ingin mengganti. Maks 2MB.</small>
+                            </div>
+                        </div>
+
+                    </div>{{-- end .row --}}
+
+                    <div class="d-flex gap-2 mt-3">
                         <button type="submit" class="btn btn-primary">Update</button>
                         <a href="{{ route('Siswa.siswa') }}" class="btn btn-secondary">Batal</a>
                     </div>
+
                 </form>
             </div>
         </div>

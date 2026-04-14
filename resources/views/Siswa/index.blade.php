@@ -19,26 +19,32 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>No</th>
+                                <th width="5%">No</th>
+                                <th>Foto</th>
                                 <th>NIS</th>
                                 <th>Nama</th>
                                 <th>Kelas</th>
                                 <th>Jurusan</th>
                                 <th>Jenis Kelamin</th>
-                                <th>No HP</th>
-                                <th>Aksi</th>
+                                <th>Email</th>
+                                <th width="15%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($siswa as $s)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $s->nis }}</td>
-                                <td>{{ $s->nama }}</td>
-                                <td>{{ $s->kelas }}</td>
-                                <td>{{ $s->jurusan }}</td>
+                                <td>
+<img src="{{ $s->foto ? asset($s->foto) : '' }}"
+     width="45" height="45"
+     style="border-radius:50%; object-fit:cover; border:2px solid #ddd;">
+                                </td>
+                                <td>{{ $s->nis ?? '-' }}</td>
+                                <td>{{ $s->nama ?? '-' }}</td>
+                                <td>{{ $s->kelas ?? '-' }}</td>
+                                <td>{{ $s->jurusan ?? '-' }}</td>
                                 <td>{{ $s->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
-                                <td>{{ $s->no_hp }}</td>
+                                <td>{{ $s->user->email ?? '-' }}</td>
                                 <td>
                                     <div class="d-flex gap-2">
                                         <div class="d-flex gap-2">

@@ -2,189 +2,183 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Aspirasi;
-use App\Models\Kategori;
-use App\Models\Progres;
-use App\Models\HistoryStatus;
-use App\Models\Ruangan;
+use App\Models\User;
+use App\Models\Petugas;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class PetugasController extends Controller
 {
+    // =========================
+    // INDEX
+    // =========================
     public function index()
     {
-        $petugas = Auth::user()->petugas;
+        $petugas = User::where('role', 'petugas')
+            ->with('petugas')
+            ->whereHas('petugas')
+            ->get();
 
-        // Statistik
-        $totalAspirasi = Aspirasi::count();
-        $aspirasiMenunggu = Aspirasi::where('status', 'Menunggu')->count();
-        $aspirasiProses = Aspirasi::where('status', 'Proses')->count();
-        $aspirasiSelesai = Aspirasi::where('status', 'Selesai')->count();
-
-        // Aspirasi yang perlu ditangani (Menunggu dan Proses)
-        $aspirasiAktif = Aspirasi::with(['user.siswa', 'kategori', 'ruangan'])
-            ->whereIn('status', ['Menunggu', 'Proses'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-        // Aspirasi per bulan (6 bulan terakhir)
-        $bulanLabels = [];
-        $bulanData = [];
-        for ($i = 5; $i >= 0; $i--) {
-            $bulan = now()->subMonths($i);
-            $bulanLabels[] = $bulan->format('M Y');
-            $bulanData[] = Aspirasi::whereYear('created_at', $bulan->year)
-                ->whereMonth('created_at', $bulan->month)
-                ->count();
-        }
-
-        return view('petugas.dashboard', compact(
-            'petugas',
-            'totalAspirasi',
-            'aspirasiMenunggu',
-            'aspirasiProses',
-            'aspirasiSelesai',
-            'aspirasiAktif',
-            'bulanLabels',
-            'bulanData'
-        ));
+        return view('petugas.index', compact('petugas'));
     }
 
-    // Data Aspirasi - Hanya menampilkan yang belum selesai (Menunggu dan Proses)
-    public function aspirasiIndex(Request $request)
+    // =========================
+    // CREATE
+    // =========================
+    public function create()
     {
-        $query = Aspirasi::with(['user.siswa', 'user.guru', 'kategori', 'ruangan', 'progres'])
-            ->where('status', '!=', 'Selesai'); // Hanya yang belum selesai
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        if ($request->filled('kategori')) {
-            $query->where('id_kategori', $request->kategori);
-        }
-
-        if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('keterangan', 'like', '%' . $request->search . '%')
-                    ->orWhere('lokasi', 'like', '%' . $request->search . '%');
-            });
-        }
-
-        $aspirasi = $query->orderBy('created_at', 'desc')->paginate(10);
-        $kategoris = Kategori::all();
-        $ruangans = Ruangan::all();
-
-        return view('petugas.aspirasi.index', compact('aspirasi', 'kategoris', 'ruangans'));
+        return view('petugas.create');
     }
 
-    public function aspirasiDetail($id)
-    {
-        $aspirasi = Aspirasi::with([
-            'user.siswa',
-            'kategori',
-            'ruangan',
-            'progres.user',
-            'historyStatus.pengubah'
-        ])->findOrFail($id);
-
-        $kategoris = Kategori::all();
-        $ruangans = Ruangan::all();
-
-        return view('petugas.aspirasi.detail', compact('aspirasi', 'kategoris', 'ruangans'));
-    }
-
-    public function updateStatus(Request $request, $id)
+    // =========================
+    // STORE
+    // =========================
+    public function store(Request $request)
     {
         $request->validate([
-            'status' => 'required|in:Menunggu,Proses,Selesai',
-            'keterangan_progres' => 'nullable|string'
+            'nip'           => 'required|unique:petugas,nip',
+            'nama'          => 'required',
+            'jenis_kelamin' => 'required',
+            'tanggal_lahir' => 'required|date',
+            'no_hp'         => 'required',
+            'alamat'        => 'required',
+            'email'         => 'required|email|unique:users,email',
+            'password'      => 'required|min:6',
+            'foto'          => 'nullable|image|max:2048',
         ]);
 
-        $aspirasi = Aspirasi::findOrFail($id);
-        $statusLama = $aspirasi->status;
-        $statusBaru = $request->status;
+        // =========================
+        // UPLOAD FOTO (MANUAL)
+        // =========================
+        $fotoPath = null;
 
-        // Simpan history status
-        HistoryStatus::create([
-            'id_aspirasi' => $id,
-            'status_lama' => $statusLama,
-            'status_baru' => $statusBaru,
-            'diubah_oleh' => Auth::id(),
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            $file->move(public_path('assets/images/petugas'), $filename);
+
+            $fotoPath = 'assets/images/petugas/' . $filename;
+        }
+
+        // =========================
+        // CREATE USER
+        // =========================
+        $user = User::create([
+            'email'    => $request->email,
+            'password' => Hash::make($request->password),
+            'role'     => 'petugas',
         ]);
 
-        // Update status
-        $aspirasi->update(['status' => $statusBaru]);
+        // =========================
+        // CREATE PETUGAS
+        // =========================
+        Petugas::create([
+            'user_id'       => $user->id,
+            'nip'           => $request->nip,
+            'nama'          => $request->nama,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'no_hp'         => $request->no_hp,
+            'alamat'        => $request->alamat,
+            'status'        => 'aktif',
+            'foto'          => $fotoPath,
+        ]);
 
-        // Simpan progres jika ada keterangan
-        if ($request->filled('keterangan_progres')) {
-            Progres::create([
-                'id_aspirasi' => $id,
-                'user_id' => Auth::id(),
-                'keterangan_progres' => $request->keterangan_progres,
+        return redirect()->route('Petugas.index')
+            ->with('success', 'Petugas berhasil ditambahkan');
+    }
+
+    // =========================
+    // EDIT
+    // =========================
+    public function edit($id)
+    {
+        $petugas = Petugas::findOrFail($id);
+
+        return view('petugas.edit', compact('petugas'));
+    }
+
+    // =========================
+    // UPDATE
+    // =========================
+    public function update(Request $request, $id)
+    {
+        $petugas = Petugas::findOrFail($id);
+
+        $request->validate([
+            'nip'   => 'required|unique:petugas,nip,' . $id,
+            'email' => 'required|email|unique:users,email,' . $petugas->user_id,
+            'foto'  => 'nullable|image|max:2048',
+        ]);
+
+        // =========================
+        // DATA UPDATE PETUGAS
+        // =========================
+        $data = [
+            'nip'           => $request->nip,
+            'nama'          => $request->nama,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'no_hp'         => $request->no_hp,
+            'alamat'        => $request->alamat,
+            'status'        => $petugas->status,
+        ];
+
+        // =========================
+        // UPDATE FOTO
+        // =========================
+        if ($request->hasFile('foto')) {
+
+            // hapus foto lama
+            if ($petugas->foto && file_exists(public_path($petugas->foto))) {
+                unlink(public_path($petugas->foto));
+            }
+
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            $file->move(public_path('assets/images/petugas'), $filename);
+
+            $data['foto'] = 'assets/images/petugas/' . $filename;
+        }
+
+        $petugas->update($data);
+
+        // =========================
+        // UPDATE USER
+        // =========================
+        $petugas->user->update([
+            'email' => $request->email
+        ]);
+
+        if ($request->password) {
+            $petugas->user->update([
+                'password' => Hash::make($request->password)
             ]);
         }
 
-        // Jika status menjadi Selesai, tambahkan progres otomatis
-        if ($statusBaru == 'Selesai') {
-            Progres::create([
-                'id_aspirasi' => $id,
-                'user_id' => Auth::id(),
-                'keterangan_progres' => 'Aspirasi telah selesai ditangani oleh Petugas ' . Auth::user()->petugas->nama,
-            ]);
+        return redirect()->route('Petugas.index')
+            ->with('success', 'Petugas berhasil diupdate');
+    }
+
+    // =========================
+    // DELETE
+    // =========================
+    public function destroy($id)
+    {
+        $petugas = Petugas::findOrFail($id);
+
+        // hapus foto
+        if ($petugas->foto && file_exists(public_path($petugas->foto))) {
+            unlink(public_path($petugas->foto));
         }
 
-        $message = $statusBaru == 'Selesai'
-            ? 'Aspirasi telah selesai dan masuk ke history'
-            : 'Status berhasil diupdate';
+        // hapus user + petugas
+        $petugas->user->delete();
+        $petugas->delete();
 
-        return redirect()->back()->with('success', $message);
-    }
-
-    public function storeFeedback(Request $request, $id)
-    {
-        $request->validate([
-            'feedback' => 'required|string'
-        ]);
-
-        Progres::create([
-            'id_aspirasi' => $id,
-            'user_id' => Auth::id(),
-            'keterangan_progres' => 'Feedback: ' . $request->feedback,
-        ]);
-
-        return redirect()->back()->with('success', 'Feedback berhasil ditambahkan');
-    }
-
-    public function storeProgres(Request $request, $id)
-    {
-        $request->validate([
-            'keterangan_progres' => 'required|string'
-        ]);
-
-        Progres::create([
-            'id_aspirasi' => $id,
-            'user_id' => Auth::id(),
-            'keterangan_progres' => $request->keterangan_progres,
-        ]);
-
-        return redirect()->back()->with('success', 'Progres berhasil ditambahkan');
-    }
-
-    public function history()
-    {
-        $history = HistoryStatus::with(['aspirasi.user.siswa', 'pengubah'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
-
-        return view('petugas.history', compact('history'));
-    }
-
-    public function profile()
-    {
-        $petugas = Auth::user()->petugas;
-        return view('petugas.profile', compact('petugas'));
+        return redirect()->route('Petugas.index')
+            ->with('success', 'Petugas berhasil dihapus');
     }
 }

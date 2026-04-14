@@ -17,7 +17,7 @@
                     <i class="icon-note menu-icon"></i><span class="nav-text">Manajemen Data User</span>
                 </a>
                     <ul aria-expanded="false">
-                        <li><a href="{{ route('Guru.guru') }}" class=" waves-effect">
+                        <li><a href="{{ route('Guru.index') }}" class=" waves-effect">
                             <span>Data Guru</span>
                             </a>
                         </li>
@@ -25,7 +25,7 @@
                             <span>Data Siswa</span>
                             </a>
                         </li>
-                        <li><a href="{{ route('Petugas.petugas') }}" class=" waves-effect">
+                        <li><a href="{{ route('Petugas.index') }}" class=" waves-effect">
                             <span>Data Petugas</span>
                             </a>
                         </li>

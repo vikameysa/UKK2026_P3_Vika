@@ -5,88 +5,148 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Tabel Data Guru</h4>
+
+                <h4 class="card-title">Tabel Data Petugas</h4>
 
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
 
                 <div class="d-flex flex-wrap gap-2 mb-3">
-                    <a href="{{ route('Guru.create') }}" class="btn btn-primary">+ Tambah Guru</a>
+                    <a href="{{ route('Petugas.create') }}" class="btn btn-primary">
+                        + Tambah Petugas
+                    </a>
                 </div>
 
                 <div class="table-responsive">
                     <table class="table table-striped">
+
                         <thead>
                             <tr>
-                                <th>No</th>
+                                <th width="5%">No</th>
+                                <th>Foto</th>
                                 <th>NIP</th>
                                 <th>Nama</th>
-                                <th>Mata Pelajaran</th>
                                 <th>Jenis Kelamin</th>
-                                <th>No HP</th>
-                                <th>Aksi</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th width="15%">Aksi</th>
                             </tr>
                         </thead>
+
                         <tbody>
-                            @forelse ($guru as $g)
+                        @forelse($petugas as $index => $p)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $g->nip }}</td>
-                                <td>{{ $g->nama }}</td>
-                                <td>{{ $g->mata_pelajaran }}</td>
-                                <td>{{ $g->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
-                                <td>{{ $g->no_hp }}</td>
+                                <td>{{ $index + 1 }}</td>
+
+                                {{-- FOTO --}}
+                                <td>
+                                    <img src="{{ $p->petugas?->foto ? asset($p->petugas->foto) : '' }}"
+                                        width="45" height="45"
+                                        style="border-radius:50%; object-fit:cover; border:2px solid #ddd;">
+                                </td>
+
+                                <td>{{ $p->petugas->nip ?? '-' }}</td>
+                                <td>{{ $p->petugas->nama ?? '-' }}</td>
+                                <td>
+                                    {{ ($p->petugas->jenis_kelamin ?? '') == 'L' ? 'Laki-laki' : 'Perempuan' }}
+                                </td>
+                                <td>{{ $p->email }}</td>
+
+                                <td>
+                                    <span class="badge {{ ($p->petugas->status ?? 'aktif') == 'aktif' ? 'bg-success' : 'bg-secondary' }}">
+                                        {{ ucfirst($p->petugas->status ?? 'Aktif') }}
+                                    </span>
+                                </td>
+
                                 <td>
                                     <div class="d-flex gap-2">
-                                        <button type="button" class="btn btn-outline-primary btn-sm" 
-                                        data-toggle="modal" 
-                                        data-target="#modalGuru{{ $g->id }}">
-                                        Detail
-                                    </button>
-                                        <a href="{{ route('Guru.edit', $g->id) }}"
-                                            class="btn btn-outline-warning btn-sm">Edit</a>
-                                        <form method="POST" action="{{ route('Guru.destroy', $g->id) }}">
+
+                                        {{-- DETAIL --}}
+                                        <button type="button"
+                                            class="btn btn-outline-primary btn-sm"
+                                            data-toggle="modal"
+                                            data-target="#modalPetugas{{ $p->id }}">
+                                            Detail
+                                        </button>
+
+                                        {{-- EDIT --}}
+                                        <a href="{{ route('Petugas.edit', $p->petugas->id) }}"
+                                            class="btn btn-outline-warning btn-sm">
+                                            Edit
+                                        </a>
+
+                                        {{-- DELETE --}}
+                                        <form method="POST"
+                                            action="{{ route('Petugas.destroy', $p->petugas->id) }}">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-outline-danger btn-sm"
-                                                onclick="return confirm('Yakin hapus data guru ini?')">Hapus</button>
+
+                                            <button type="submit"
+                                                class="btn btn-outline-danger btn-sm"
+                                                onclick="return confirm('Yakin hapus data ini?')">
+                                                Hapus
+                                            </button>
                                         </form>
+
                                     </div>
                                 </td>
                             </tr>
 
-                            {{-- MODAL DETAIL --}}
-                            <div class="modal fade" id="modalGuru{{ $g->id }}" tabindex="-1">
+                            {{-- MODAL --}}
+                            <div class="modal fade" id="modalPetugas{{ $p->id }}" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
+
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Detail Guru</h5>
+                                            <h5 class="modal-title">Detail Petugas</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
+
                                         <div class="modal-body text-center">
-                                            <p><strong>NIP:</strong> {{ $g->nip }}</p>
-                                            <p><strong>Nama:</strong> {{ $g->nama }}</p>
-                                            <p><strong>Mata Pelajaran:</strong> {{ $g->mata_pelajaran }}</p>
-                                            <p><strong>Jenis Kelamin:</strong> {{ $g->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</p>
-                                            <p><strong>Tanggal Lahir:</strong> {{ $g->tanggal_lahir }}</p>
-                                            <p><strong>Alamat:</strong> {{ $g->alamat }}</p>
-                                            <p><strong>No HP:</strong> {{ $g->no_hp }}</p>
+
+                                            <img src="{{ $p->petugas?->foto ? asset($p->petugas->foto) : '' }}"
+                                                width="120" height="120"
+                                                style="border-radius:50%; object-fit:cover; border:3px solid #ddd;">
+
+                                            <hr>
+
+                                            <p><strong>NIP:</strong> {{ $p->petugas->nip ?? '-' }}</p>
+                                            <p><strong>Nama:</strong> {{ $p->petugas->nama ?? '-' }}</p>
+                                            <p><strong>Jenis Kelamin:</strong>
+                                                {{ $p->petugas->jenis_kelamin ?? '-' }}
+                                            </p>
+                                            <p><strong>Tanggal Lahir:</strong>
+                                                {{ $p->petugas->tanggal_lahir ?? '-' }}
+                                            </p>
+                                            <p><strong>No HP:</strong> {{ $p->petugas->no_hp ?? '-' }}</p>
+                                            <p><strong>Alamat:</strong> {{ $p->petugas->alamat ?? '-' }}</p>
+                                            <p><strong>Email:</strong> {{ $p->email ?? '-' }}</p>
+
                                         </div>
+
                                         <div class="modal-footer">
-                                            <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                            <button class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Tutup
+                                            </button>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
-                            @empty
+
+                        @empty
                             <tr>
-                                <td colspan="8" class="text-center text-muted">Belum ada data guru</td>
+                                <td colspan="8" class="text-center text-muted">
+                                    Belum ada data petugas
+                                </td>
                             </tr>
-                            @endforelse
+                        @endforelse
                         </tbody>
+
                     </table>
                 </div>
+
             </div>
         </div>
     </div>

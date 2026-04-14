@@ -1,92 +1,97 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Tabel Data Petugas</h4>
 
-                @if(session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
-
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                    <a href="{{ route('Petugas.create') }}" class="btn btn-primary">+ Tambah Petugas</a>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>NIP</th>
-                                <th>Nama</th>
-                                <th>Jenis Kelamin</th>
-                                <th>No HP</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($petugas as $p)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $k->nip }}</td>
-                                <td>{{ $k->nama }}</td>
-                                <td>{{ $k->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
-                                <td>{{ $k->no_hp }}</td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <button type="button" class="btn btn-outline-primary btn-sm" 
-                                        data-toggle="modal" 
-                                        data-target="#modalDokter{{ $s->id }}">
-                                        View
-                                    </button>
-                                        <a href="{{ route('Guru.edit', $g->id) }}"
-                                            class="btn btn-outline-warning btn-sm">Edit</a>
-                                        <form method="POST" action="{{ route('Guru.destroy', $g->id) }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-outline-danger btn-sm"
-                                                onclick="return confirm('Yakin hapus data guru ini?')">Hapus</button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            {{-- MODAL DETAIL --}}
-                            <div class="modal fade" id="modalGuru{{ $g->id }}" tabindex="-1">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Detail Guru</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body text-center">
-                                            <p><strong>NIP:</strong> {{ $g->nip }}</p>
-                                            <p><strong>Nama:</strong> {{ $g->nama }}</p>
-                                            <p><strong>Mata Pelajaran:</strong> {{ $g->mata_pelajaran }}</p>
-                                            <p><strong>Jenis Kelamin:</strong> {{ $g->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</p>
-                                            <p><strong>Tanggal Lahir:</strong> {{ $g->tanggal_lahir }}</p>
-                                            <p><strong>Alamat:</strong> {{ $g->alamat }}</p>
-                                            <p><strong>No HP:</strong> {{ $g->no_hp }}</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                                        </div>
-                                    </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Dashboard Admin</h3>
+                    
+                    <div class="row">
+                        <!-- Profile Card -->
+                        <div class="col-lg-3 col-sm-6 mb-4">
+                            <div class="card gradient-1">
+                                <div class="card-body">
+                                    <h5 class="card-title text-white">Profil siswa</h5>
+                                    <p class="text-white mb-1"><strong>Nama:</strong> {{ Auth::user()->name }}</p>
+                                    <p class="text-white mb-1"><strong>Email:</strong> {{ Auth::user()->email }}</p>
+                                    <p class="text-white mb-0"><strong>Status:</strong> {{ Auth::user()->status }}</p>
                                 </div>
                             </div>
-                            @empty
-                            <tr>
-                                <td colspan="8" class="text-center text-muted">Belum ada data guru</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                        </div>
+
+                        <!-- Total Siswa -->
+                        <div class="col-lg-3 col-sm-6 mb-4">
+                            <div class="card gradient-2">
+                                <div class="card-body">
+                                    <h5 class="card-title text-white">Total siswa</h5>
+                                    <h2 class="text-white">{{ $totalSiswa ?? 0 }}</h2>
+                                    <p class="text-white mb-0">Siswa Terdaftar</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Guru -->
+                        <div class="col-lg-3 col-sm-6 mb-4">
+                            <div class="card gradient-3">
+                                <div class="card-body">
+                                    <h5 class="card-title text-white">Total guru</h5>
+                                    <h2 class="text-white">{{ $totalGuru ?? 0 }}</h2>
+                                    <p class="text-white mb-0">Guru Aktif</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Quick Actions -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5 class="mb-3">Menu Cepat</h5>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="{{ route('Antrian.antrian') }}" class="btn btn-primary btn-block">
+                                <i class="mdi mdi-calendar-check"></i> Lihat Antrian
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="{{ route('Pasien.pasien') }}" class="btn btn-info btn-block">
+                                <i class="mdi mdi-account-multiple"></i> Daftar Pasien
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="#" class="btn btn-warning btn-block">
+                                <i class="mdi mdi-clipboard-list"></i> Riwayat Pemeriksaan
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="{{ route('Dokter.edit', Auth::user()->id) }}" class="btn btn-secondary btn-block">
+                                <i class="mdi mdi-pencil"></i> Edit Profil
+                            </a>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Recent Activity / Antrian Info -->
+                    <div class="row mt-4">
+                        <div class="col-lg-12">
+                            <h5 class="mb-3">Informasi Penting</h5>
+                            <div class="alert alert-info" role="alert">
+                                <i class="mdi mdi-information"></i>
+                                Selamat datang {{ Auth::user()->name }}! Anda login sebagai <strong>Dokter</strong>.
+                                Gunakan menu di atas untuk mengelola antrian dan data pasien Anda.
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @endsection

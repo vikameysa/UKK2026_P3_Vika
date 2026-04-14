@@ -26,8 +26,9 @@ Route::get('/siswa/dashboard', function () {
     return view('siswa.dashboard');
 })->name('siswa.dashboard');
 
-Route::get('/petugas/dashboard', [PetugasController::class, 'index'])
-    ->name('petugas.dashboard');
+Route::get('/petugas/dashboard', function () {
+    return view('petugas.dashboard');
+})->name('petugas.dashboard');
 
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
@@ -40,30 +41,29 @@ Route::middleware('auth')->group(function () {
 });
 
 // Untuk Guru
-Route::get('/Guru', [GuruController::class, 'index'])->name('Guru.guru');
+// CRUD Guru
+Route::get('/Guru', [GuruController::class, 'index'])->name('Guru.index');
 Route::get('/Guru/create', [GuruController::class, 'create'])->name('Guru.create');
+Route::post('/Guru/store', [GuruController::class, 'store'])->name('Guru.store');
 Route::get('/Guru/edit/{id}', [GuruController::class, 'edit'])->name('Guru.edit');
 Route::put('/Guru/update/{id}', [GuruController::class, 'update'])->name('Guru.update');
-Route::post('/Guru/store', [GuruController::class, 'store'])->name('Guru.store');
 Route::delete('/Guru/{id}', [GuruController::class, 'destroy'])->name('Guru.destroy');
 
 // Untuk Siswa
 Route::get('/Siswa', [SiswaController::class, 'index'])->name('Siswa.siswa');
 Route::get('/Siswa/create', [SiswaController::class, 'create'])->name('Siswa.create');
+Route::post('/Siswa/store', [SiswaController::class, 'store'])->name('Siswa.store');
 Route::get('/Siswa/edit/{id}', [SiswaController::class, 'edit'])->name('Siswa.edit');
 Route::put('/Siswa/update/{id}', [SiswaController::class, 'update'])->name('Siswa.update');
-Route::post('/Siswa/store', [SiswaController::class, 'store'])->name('Siswa.store');
 Route::delete('/Siswa/{id}', [SiswaController::class, 'destroy'])->name('Siswa.destroy');
 
 // Untuk Petugas
-Route::get('/Petugas', [PetugasController::class, 'index'])->name('Petugas.petugas');
+Route::get('/Petugas', [PetugasController::class, 'index'])->name('Petugas.index');
 Route::get('/Petugas/create', [PetugasController::class, 'create'])->name('Petugas.create');
+Route::post('/Petugas/store', [PetugasController::class, 'store'])->name('Petugas.store');
 Route::get('/Petugas/edit/{id}', [PetugasController::class, 'edit'])->name('Petugas.edit');
 Route::put('/Petugas/update/{id}', [PetugasController::class, 'update'])->name('Petugas.update');
-Route::post('/Petugas/store', [PetugasController::class, 'store'])->name('Petugas.store');
 Route::delete('/Petugas/{id}', [PetugasController::class, 'destroy'])->name('Petugas.destroy');
-Route::get('/petugas/aspirasi/{id}', [PetugasController::class, 'aspirasiDetail'])
-    ->name('petugas.aspirasi.detail');
 
 // Master Data
 // Untuk Kategori

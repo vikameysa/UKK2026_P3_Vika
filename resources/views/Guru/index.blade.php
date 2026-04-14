@@ -19,39 +19,59 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>No</th>
+                                <th width="5%">No</th>
+                                <th>Foto</th>
                                 <th>NIP</th>
                                 <th>Nama</th>
                                 <th>Mata Pelajaran</th>
                                 <th>Jenis Kelamin</th>
-                                <th>No HP</th>
-                                <th>Aksi</th>
+                                <th>Email</th>
+                                <th width="15%">Aksi</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             @forelse ($guru as $g)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $g->nip }}</td>
-                                <td>{{ $g->nama }}</td>
-                                <td>{{ $g->mata_pelajaran }}</td>
+
+                                <td>
+<img src="{{ $g->foto ? asset($g->foto) : '' }}"
+     width="45" height="45"
+     style="border-radius:50%; object-fit:cover; border:2px solid #ddd;">
+                                </td>
+
+                                <td>{{ $g->nip ?? '-' }}</td>
+                                <td>{{ $g->nama ?? '-' }}</td>
+                                <td>{{ $g->mata_pelajaran ?? '-' }}</td>
                                 <td>{{ $g->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
-                                <td>{{ $g->no_hp }}</td>
+                                <td>{{ $g->user->email ?? '-' }}</td>
+
                                 <td>
                                     <div class="d-flex gap-2">
-                                        <button type="button" class="btn btn-outline-primary btn-sm" 
-                                        data-toggle="modal" 
-                                        data-target="#modalGuru{{ $g->id }}">
-                                        Detail
-                                    </button>
+
+                                        <button type="button"
+                                            class="btn btn-outline-primary btn-sm"
+                                            data-toggle="modal"
+                                            data-target="#modalGuru{{ $g->id }}">
+                                            Detail
+                                        </button>
+
                                         <a href="{{ route('Guru.edit', $g->id) }}"
-                                            class="btn btn-outline-warning btn-sm">Edit</a>
+                                            class="btn btn-outline-warning btn-sm">
+                                            Edit
+                                        </a>
+
                                         <form method="POST" action="{{ route('Guru.destroy', $g->id) }}">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-outline-danger btn-sm"
-                                                onclick="return confirm('Yakin hapus data guru ini?')">Hapus</button>
+                                            <button type="submit"
+                                                class="btn btn-outline-danger btn-sm"
+                                                onclick="return confirm('Yakin hapus data guru ini?')">
+                                                Hapus
+                                            </button>
                                         </form>
+
                                     </div>
                                 </td>
                             </tr>
@@ -60,25 +80,35 @@
                             <div class="modal fade" id="modalGuru{{ $g->id }}" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
+
                                         <div class="modal-header">
                                             <h5 class="modal-title">Detail Guru</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
+
                                         <div class="modal-body text-center">
                                             <p><strong>NIP:</strong> {{ $g->nip }}</p>
                                             <p><strong>Nama:</strong> {{ $g->nama }}</p>
                                             <p><strong>Mata Pelajaran:</strong> {{ $g->mata_pelajaran }}</p>
-                                            <p><strong>Jenis Kelamin:</strong> {{ $g->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</p>
+                                            <p><strong>Jenis Kelamin:</strong> {{ $g->jenis_kelamin }}</p>
                                             <p><strong>Tanggal Lahir:</strong> {{ $g->tanggal_lahir }}</p>
-                                            <p><strong>Alamat:</strong> {{ $g->alamat }}</p>
                                             <p><strong>No HP:</strong> {{ $g->no_hp }}</p>
+                                            <p><strong>Alamat:</strong> {{ $g->alamat }}</p>
+                                            <p><strong>Email:</strong> {{ $g->user->email ?? '-' }}</p>
+
+                                            <img src="{{ $g->foto ? asset('storage/'.$g->foto) : asset('assets/images/avatar-1.jpg') }}"
+                                                width="120" height="120"
+                                                style="border-radius:50%; object-fit:cover; border:3px solid #ddd;">
                                         </div>
+
                                         <div class="modal-footer">
                                             <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
+
                             @empty
                             <tr>
                                 <td colspan="8" class="text-center text-muted">Belum ada data guru</td>
@@ -87,6 +117,7 @@
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </div>
     </div>
