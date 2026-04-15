@@ -104,10 +104,15 @@
                                     <a href="{{ route('Pengaduan.detail', $a->id_aspirasi) }}" class="btn btn-info btn-sm">
                                         <i class="ph ph-eye"></i> Detail
                                     </a>
-                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" 
-                                            data-bs-target="#deleteModal{{ $a->id_aspirasi }}">
-                                        <i class="ph ph-trash"></i> Hapus
-                                    </button>
+                                    <form action="{{ route('Pengaduan.destroy', $a->id_aspirasi) }}"
+                                        method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Yakin hapus?')">
+                                            Hapus
+                                        </button>
+                                    </form>
                                 
                               
                             @empty

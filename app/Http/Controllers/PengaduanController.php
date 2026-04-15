@@ -49,7 +49,7 @@ class PengaduanController extends Controller
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
                 $q->where('keterangan', 'like', '%' . $request->search . '%')
-                  ->orWhere('lokasi', 'like', '%' . $request->search . '%');
+                    ->orWhere('lokasi', 'like', '%' . $request->search . '%');
             });
         }
 
@@ -72,7 +72,7 @@ class PengaduanController extends Controller
         ));
     }
 
-    // ==================== DETAIL ====================
+    /// ==================== DETAIL ====================
     public function show($id)
     {
         $aspirasi = Aspirasi::with([

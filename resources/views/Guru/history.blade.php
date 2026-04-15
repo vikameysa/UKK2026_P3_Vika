@@ -9,7 +9,7 @@
                 <small>Daftar aspirasi yang sudah selesai ditangani</small>
             </div>
             <div class="card-body">
-                @if($aspirasiSelesai->count() > 0)
+                @if($history->count() > 0)
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
                         <thead class="table-light">

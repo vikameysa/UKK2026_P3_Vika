@@ -103,11 +103,15 @@ Route::delete('/Ruangan/{id}', [RuanganController::class, 'destroy'])->name('Rua
 
 // Pengaduan/Aspirasi Management
 Route::get('/Pengaduan', [PengaduanController::class, 'index'])->name('Pengaduan.pengaduan');
-Route::get('/Pengaduan/{id}', [PengaduanController::class, 'detail'])->name('Pengaduan.detail');
+Route::get('/pengaduan/{id}', [PengaduanController::class, 'show'])
+    ->name('Pengaduan.detail');
 Route::post('/Pengaduan/{id}/status', [PengaduanController::class, 'updateStatus'])->name('Pengaduan.status');
 Route::post('/Pengaduan/{id}/feedback', [PengaduanController::class, 'storeFeedback'])->name('Pengaduan.feedback');
 Route::post('/Pengaduan/{id}/progres', [PengaduanController::class, 'storeProgres'])->name('Pengaduan.progres');
-Route::delete('/Pengaduan/{id}', [PengaduanController::class, 'destroyAspirasi'])->name('Pengaduan.destroy');
+Route::delete('/Pengaduan/{id}', [PengaduanController::class, 'destroy'])
+    ->name('Pengaduan.destroy');
+Route::get('/Pengaduan/{id}', [PengaduanController::class, 'show'])
+    ->name('Pengaduan.detail');
 
 //aspirasi untuk guru
 Route::prefix('guru')->group(function () {
