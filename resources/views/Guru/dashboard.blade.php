@@ -48,11 +48,12 @@
                                 <td>{{ $g->no_hp }}</td>
                                 <td>
                                     <div class="d-flex gap-2">
-                                        <button type="button" class="btn btn-outline-primary btn-sm" 
-                                        data-toggle="modal" 
-                                        data-target="#modalDokter{{ $s->id }}">
-                                        View
-                                    </button>
+                                        {{-- FIXED: was data-target="#modalDokter{{ $s->id }}" --}}
+                                        <button type="button" class="btn btn-outline-primary btn-sm"
+                                            data-toggle="modal"
+                                            data-target="#modalGuru{{ $g->id }}">
+                                            View
+                                        </button>
                                         <a href="{{ route('Guru.edit', $g->id) }}"
                                             class="btn btn-outline-warning btn-sm">Edit</a>
                                         <form method="POST" action="{{ route('Guru.destroy', $g->id) }}">

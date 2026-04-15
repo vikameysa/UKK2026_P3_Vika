@@ -34,7 +34,7 @@
 
             <li>
                 <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                    <i class="icon-badge menu-icon"></i><span class="nav-text">Master Data</span>
+                    <i class="icon-notebook menu-icon"></i><span class="nav-text">Master Data</span>
                 </a>
                     <ul aria-expanded="false">
                         <li><a href="{{ route('Kategori.kategori') }}" class=" waves-effect">
@@ -55,11 +55,9 @@
                         </li>
                     </ul>
             </li>
-
-
             <li>
-                <a href="{{ route('Siswa.siswa') }}" aria-expanded="false">
-                    <i class="icon-badge menu-icon"></i><span class="nav-text">Data Pengaduan</span>
+                <a href="{{ route('Pengaduan.pengaduan') }}" aria-expanded="false">
+                    <i class="icon-badge menu-icon"></i><span class="nav-text">Data Aspirasi</span>
                 </a>
             </li>  
                       

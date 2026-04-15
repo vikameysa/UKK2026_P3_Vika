@@ -9,6 +9,9 @@ use App\Http\Controllers\GuruController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\PengaduanController;
+use App\Http\Controllers\Guru\AspirasiController as GuruAspirasiController;
+use App\Http\Controllers\Siswa\AspirasiController as SiswaAspirasiController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -97,3 +100,39 @@ Route::post('/Ruangan/store', [RuanganController::class, 'store'])->name('Ruanga
 Route::get('/Ruangan/edit/{id}', [RuanganController::class, 'edit'])->name('Ruangan.edit');
 Route::put('/Ruangan/update/{id}', [RuanganController::class, 'update'])->name('Ruangan.update');
 Route::delete('/Ruangan/{id}', [RuanganController::class, 'destroy'])->name('Ruangan.destroy');
+
+// Pengaduan/Aspirasi Management
+Route::get('/Pengaduan', [PengaduanController::class, 'index'])->name('Pengaduan.pengaduan');
+Route::get('/Pengaduan/{id}', [PengaduanController::class, 'detail'])->name('Pengaduan.detail');
+Route::post('/Pengaduan/{id}/status', [PengaduanController::class, 'updateStatus'])->name('Pengaduan.status');
+Route::post('/Pengaduan/{id}/feedback', [PengaduanController::class, 'storeFeedback'])->name('Pengaduan.feedback');
+Route::post('/Pengaduan/{id}/progres', [PengaduanController::class, 'storeProgres'])->name('Pengaduan.progres');
+Route::delete('/Pengaduan/{id}', [PengaduanController::class, 'destroyAspirasi'])->name('Pengaduan.destroy');
+
+//aspirasi untuk guru
+Route::prefix('guru')->group(function () {
+
+    Route::get('/aspirasi', [GuruAspirasiController::class, 'index'])->name('guru.aspirasi.index');
+    Route::get('/aspirasi/create', [GuruAspirasiController::class, 'create'])->name('guru.aspirasi.create');
+    Route::post('/aspirasi', [GuruAspirasiController::class, 'store'])->name('guru.aspirasi.store');
+    Route::get('/aspirasi/{id}', [GuruAspirasiController::class, 'detail'])->name('guru.aspirasi.detail');
+    Route::post('/aspirasi/{id}/feedback', [GuruAspirasiController::class, 'storeFeedback'])->name('guru.aspirasi.feedback');
+    Route::post('/aspirasi/{id}/progres', [GuruAspirasiController::class, 'storeProgres'])->name('guru.aspirasi.progres');
+    Route::put('/aspirasi/{id}/status', [GuruAspirasiController::class, 'updateStatus'])->name('guru.aspirasi.status');
+    Route::get('/history', [GuruAspirasiController::class, 'history'])->name('guru.aspirasi.history');
+    Route::get('/statistik', [GuruAspirasiController::class, 'statistik'])->name('guru.statistik');
+});
+
+//aspirasi untuk siswa
+Route::prefix('siswa')->group(function () {
+
+    Route::get('/aspirasi', [SiswaAspirasiController::class, 'index'])->name('siswa.aspirasi.index');
+    Route::get('/aspirasi/create', [SiswaAspirasiController::class, 'create'])->name('siswa.aspirasi.create');
+    Route::post('/aspirasi', [SiswaAspirasiController::class, 'store'])->name('siswa.aspirasi.store');
+    Route::get('/aspirasi/{id}', [SiswaAspirasiController::class, 'detail'])->name('siswa.aspirasi.detail');
+    Route::get('/status', [SiswaAspirasiController::class, 'status'])->name('siswa.aspirasi.status');
+    Route::get('/history', [SiswaAspirasiController::class, 'history'])->name('siswa.aspirasi.history');
+    Route::post('/aspirasi/{id}/feedback', [SiswaAspirasiController::class, 'storeFeedback'])->name('siswa.aspirasi.feedback');
+
+    Route::get('/profile', [SiswaAspirasiController::class, 'profile'])->name('siswa.profile');
+});
