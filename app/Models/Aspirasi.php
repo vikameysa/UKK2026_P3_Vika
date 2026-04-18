@@ -21,7 +21,7 @@ class Aspirasi extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function kategori()
@@ -36,11 +36,11 @@ class Aspirasi extends Model
 
     public function progres()
     {
-        return $this->hasMany(Progres::class, 'id_aspirasi');
+        return $this->hasMany(Progres::class, 'id_aspirasi', 'id_aspirasi');
     }
 
     public function historyStatus()
     {
-        return $this->hasMany(HistoryStatus::class, 'id_aspirasi');
+        return $this->hasMany(HistoryStatus::class, 'id_aspirasi', 'id_aspirasi');
     }
 }

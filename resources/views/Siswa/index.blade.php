@@ -74,15 +74,28 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body text-center">
-                                            <p><strong>NIS:</strong> {{ $s->nis }}</p>
-                                            <p><strong>Nama:</strong> {{ $s->nama }}</p>
-                                            <p><strong>Kelas:</strong> {{ $s->kelas }}</p>
-                                            <p><strong>Jurusan:</strong> {{ $s->jurusan }}</p>
-                                            <p><strong>Jenis Kelamin:</strong> {{ $s->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</p>
-                                            <p><strong>Tanggal Lahir:</strong> {{ $s->tanggal_lahir }}</p>
-                                            <p><strong>Alamat:</strong> {{ $s->alamat }}</p>
-                                            <p><strong>No HP:</strong> {{ $s->no_hp }}</p>
-                                        </div>
+
+    {{-- FOTO --}}
+    @if($s->foto)
+        <img src="{{ asset($s->foto) }}" 
+             class="rounded-circle mb-3" 
+             width="120" height="120"
+             style="object-fit: cover;">
+    @else
+        <img src="https://via.placeholder.com/120" 
+             class="rounded-circle mb-3">
+    @endif
+
+    <p><strong>NIS:</strong> {{ $s->nis }}</p>
+    <p><strong>Nama:</strong> {{ $s->nama }}</p>
+    <p><strong>Kelas:</strong> {{ $s->kelas }}</p>
+    <p><strong>Jurusan:</strong> {{ $s->jurusan }}</p>
+    <p><strong>Jenis Kelamin:</strong> {{ $s->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</p>
+    <p><strong>Tanggal Lahir:</strong> {{ $s->tanggal_lahir }}</p>
+    <p><strong>Alamat:</strong> {{ $s->alamat }}</p>
+    <p><strong>No HP:</strong> {{ $s->no_hp }}</p>
+
+</div>
                                         <div class="modal-footer">
                                             <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                                         </div>

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Siswa;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class SiswaController extends Controller
 {
@@ -24,7 +26,7 @@ class SiswaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nis' => 'required',
+            'nis' => 'required|unique:siswa,nis',
             'nama' => 'required',
             'kelas' => 'required',
             'jurusan' => 'required',
@@ -32,98 +34,45 @@ class SiswaController extends Controller
             'tanggal_lahir' => 'required|date',
             'alamat' => 'required',
             'no_hp' => 'required',
-            'user_id' => 'required|exists:users,id',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
             'foto' => 'nullable|image|max:2048',
         ]);
 
-        $data = $request->all();
+        // 1. BUAT USER
+        $user = User::create([
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'siswa',
+        ]);
 
-        // =========================
-        // UPLOAD FOTO (MANUAL)
-        // =========================
+        // 2. UPLOAD FOTO
+        $fotoPath = null;
+
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $filename = time() . '_' . $file->getClientOriginalName();
 
             $file->move(public_path('assets/images/siswa'), $filename);
 
-            $data['foto'] = 'assets/images/siswa/' . $filename;
+            $fotoPath = 'assets/images/siswa/' . $filename;
         }
 
-        Siswa::create($data);
-
-        return redirect()->route('Siswa.siswa')
-            ->with('success', 'Data berhasil ditambahkan');
-    }
-
-    // =========================
-    // EDIT
-    // =========================
-    public function edit($id)
-    {
-        $siswa = Siswa::findOrFail($id);
-        return view('siswa.edit', compact('siswa'));
-    }
-
-    // =========================
-    // UPDATE
-    // =========================
-    public function update(Request $request, $id)
-    {
-        $siswa = Siswa::findOrFail($id);
-
-        $request->validate([
-            'nis' => 'required|unique:siswa,nis,' . $id,
-            'nama' => 'required',
-            'kelas' => 'required',
-            'jurusan' => 'required',
-            'jenis_kelamin' => 'required|in:L,P',
-            'tanggal_lahir' => 'required|date',
-            'alamat' => 'required',
-            'no_hp' => 'required',
-            'foto' => 'nullable|image|max:2048',
+        // 3. SIMPAN SISWA
+        Siswa::create([
+            'user_id' => $user->id,
+            'nis' => $request->nis,
+            'nama' => $request->nama,
+            'kelas' => $request->kelas,
+            'jurusan' => $request->jurusan,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'alamat' => $request->alamat,
+            'no_hp' => $request->no_hp,
+            'foto' => $fotoPath,
         ]);
 
-        $data = $request->all();
-
-        // =========================
-        // UPDATE FOTO
-        // =========================
-        if ($request->hasFile('foto')) {
-
-            // hapus foto lama
-            if ($siswa->foto && file_exists(public_path($siswa->foto))) {
-                unlink(public_path($siswa->foto));
-            }
-
-            $file = $request->file('foto');
-            $filename = time() . '_' . $file->getClientOriginalName();
-
-            $file->move(public_path('assets/images/siswa'), $filename);
-
-            $data['foto'] = 'assets/images/siswa/' . $filename;
-        }
-
-        $siswa->update($data);
-
         return redirect()->route('Siswa.siswa')
-            ->with('success', 'Data berhasil diupdate');
-    }
-
-    // =========================
-    // DELETE
-    // =========================
-    public function destroy($id)
-    {
-        $siswa = Siswa::findOrFail($id);
-
-        if ($siswa->foto && file_exists(public_path($siswa->foto))) {
-            unlink(public_path($siswa->foto));
-        }
-
-        $siswa->delete();
-
-        return redirect()->route('Siswa.siswa')
-            ->with('success', 'Data berhasil dihapus');
+            ->with('success', 'Data siswa berhasil ditambahkan');
     }
 }

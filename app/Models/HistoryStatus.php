@@ -6,18 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class HistoryStatus extends Model
 {
+    const UPDATED_AT = null; // ← matikan updated_at
+
     protected $table = 'history_status';
 
     protected $fillable = [
         'id_aspirasi',
         'status_lama',
         'status_baru',
-        'diubah_oleh'
+        'diubah_oleh',
     ];
 
     public function aspirasi()
     {
-        return $this->belongsTo(Aspirasi::class, 'id_aspirasi');
+        return $this->belongsTo(Aspirasi::class, 'id_aspirasi', 'id_aspirasi');
     }
 
     public function pengubah()

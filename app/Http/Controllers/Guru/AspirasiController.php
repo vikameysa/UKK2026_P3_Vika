@@ -25,10 +25,10 @@ class AspirasiController extends Controller
         $guru = $this->getGuru();
 
         $statistik = [
-            'total' => Aspirasi::count(),
+            'total'    => Aspirasi::count(),
             'menunggu' => Aspirasi::where('status', 'Menunggu')->count(),
-            'proses' => Aspirasi::where('status', 'Proses')->count(),
-            'selesai' => Aspirasi::where('status', 'Selesai')->count(),
+            'proses'   => Aspirasi::where('status', 'Proses')->count(),
+            'selesai'  => Aspirasi::where('status', 'Selesai')->count(),
         ];
 
         if ($guru->canCreateAspirasi()) {
@@ -59,18 +59,19 @@ class AspirasiController extends Controller
         }
 
         $bulanLabels = [];
-        $bulanData = [];
+        $bulanData   = [];
 
         for ($i = 5; $i >= 0; $i--) {
-            $bulan = now()->subMonths($i);
-            $bulanLabels[] = $bulan->format('M Y');
-
-            $bulanData[] = Aspirasi::whereYear('created_at', $bulan->year)
+            $bulan          = now()->subMonths($i);
+            $bulanLabels[]  = $bulan->format('M Y');
+            $bulanData[]    = Aspirasi::whereYear('created_at', $bulan->year)
                 ->whereMonth('created_at', $bulan->month)
                 ->count();
         }
 
-        return view('guru.dashboard', compact('guru', 'statistik', 'aspirasiTerbaru', 'bulanLabels', 'bulanData'));
+        return view('guru.dashboard', compact(
+            'guru', 'statistik', 'aspirasiTerbaru', 'bulanLabels', 'bulanData'
+        ));
     }
 
     // INDEX
@@ -91,8 +92,7 @@ class AspirasiController extends Controller
                     ->where('status', '!=', 'Selesai');
             } else {
                 $kelasId = $guru->getKelasId();
-
-                $query = $kelasId
+                $query   = $kelasId
                     ? Aspirasi::with(['user.siswa', 'kategori', 'ruangan'])
                         ->where('status', '!=', 'Selesai')
                         ->whereHas('user.siswa', fn($q) => $q->where('id_kelas', $kelasId))
@@ -132,21 +132,21 @@ class AspirasiController extends Controller
             });
         }
 
-        $aspirasi = $query->latest()->paginate(10);
+        $aspirasi  = $query->latest()->paginate(10);
 
         $statistik = [
-            'total' => Aspirasi::count(),
+            'total'    => Aspirasi::count(),
             'menunggu' => Aspirasi::where('status', 'Menunggu')->count(),
-            'proses' => Aspirasi::where('status', 'Proses')->count(),
-            'selesai' => Aspirasi::where('status', 'Selesai')->count(),
+            'proses'   => Aspirasi::where('status', 'Proses')->count(),
+            'selesai'  => Aspirasi::where('status', 'Selesai')->count(),
         ];
 
         return view('guru.aspirasi.index', [
-            'guru' => $guru,
-            'aspirasi' => $aspirasi,
-            'statistik' => $statistik,
-            'kategoris' => Kategori::all(),
-            'ruangans' => Ruangan::all(),
+            'guru'        => $guru,
+            'aspirasi'    => $aspirasi,
+            'statistik'   => $statistik,
+            'kategoris'   => Kategori::all(),
+            'ruangans'    => Ruangan::all(),
             'currentType' => $request->get('type', 'kelas'),
         ]);
     }
@@ -161,9 +161,9 @@ class AspirasiController extends Controller
         }
 
         return view('guru.aspirasi.create', [
-            'guru' => $guru,
+            'guru'      => $guru,
             'kategoris' => Kategori::all(),
-            'ruangans' => Ruangan::orderBy('nama_ruangan')->get(),
+            'ruangans'  => Ruangan::orderBy('nama_ruangan')->get(),
         ]);
     }
 
@@ -178,25 +178,24 @@ class AspirasiController extends Controller
 
         $request->validate([
             'id_kategori' => 'required|exists:kategori,id_kategori',
-            'id_ruangan' => 'required|exists:ruangan,id_ruangan',
-            'keterangan' => 'required|string',
-            'foto' => 'nullable|image|max:2048',
+            'id_ruangan'  => 'required|exists:ruangan,id_ruangan',
+            'keterangan'  => 'required|string',
+            'foto'        => 'nullable|image|max:2048',
         ]);
 
-        $ruangan = Ruangan::findOrFail($request->id_ruangan);
-
+        $ruangan  = Ruangan::findOrFail($request->id_ruangan);
         $fotoPath = $request->file('foto')
             ? $request->file('foto')->store('aspirasi_foto', 'public')
             : null;
 
         Aspirasi::create([
-            'user_id' => Auth::id(),
+            'user_id'     => Auth::id(),
             'id_kategori' => $request->id_kategori,
-            'id_ruangan' => $request->id_ruangan,
-            'lokasi' => $ruangan->nama_ruangan . ' (' . $ruangan->kode_ruangan . ')',
-            'keterangan' => $request->keterangan,
-            'foto' => $fotoPath,
-            'status' => 'Menunggu',
+            'id_ruangan'  => $request->id_ruangan,
+            'lokasi'      => $ruangan->nama_ruangan . ' (' . $ruangan->kode_ruangan . ')',
+            'keterangan'  => $request->keterangan,
+            'foto'        => $fotoPath,
+            'status'      => 'Menunggu',
         ]);
 
         return redirect()->route('guru.aspirasi.index')->with('success', 'Berhasil');
@@ -205,8 +204,7 @@ class AspirasiController extends Controller
     // DETAIL
     public function detail($id)
     {
-        $guru = $this->getGuru();
-
+        $guru  = $this->getGuru();
         $query = Aspirasi::with(['kategori', 'ruangan', 'progres.user', 'historyStatus.pengubah']);
 
         if ($guru->canCreateAspirasi()) {
@@ -230,12 +228,12 @@ class AspirasiController extends Controller
         $request->validate(['feedback' => 'required']);
 
         Progres::create([
-            'id_aspirasi' => $id,
-            'user_id' => Auth::id(),
+            'id_aspirasi'        => $id,
+            'user_id'            => Auth::id(),
             'keterangan_progres' => 'Feedback: ' . $request->feedback,
         ]);
 
-        return back()->with('success', 'OK');
+        return back()->with('success', 'Feedback berhasil disimpan.');
     }
 
     // PROGRES
@@ -250,12 +248,12 @@ class AspirasiController extends Controller
         $request->validate(['keterangan_progres' => 'required']);
 
         Progres::create([
-            'id_aspirasi' => $id,
-            'user_id' => Auth::id(),
+            'id_aspirasi'        => $id,
+            'user_id'            => Auth::id(),
             'keterangan_progres' => $request->keterangan_progres,
         ]);
 
-        return back()->with('success', 'OK');
+        return back()->with('success', 'Progres berhasil ditambahkan.');
     }
 
     // STATUS
@@ -282,19 +280,17 @@ class AspirasiController extends Controller
 
         $aspirasi->update(['status' => $request->status]);
 
-        return back()->with('success', 'Status updated');
+        return back()->with('success', 'Status berhasil diperbarui.');
     }
 
     // HISTORY
     public function history(Request $request)
     {
-        $guru = $this->getGuru();
-
+        $guru  = $this->getGuru();
         $query = HistoryStatus::with(['aspirasi']);
 
         if ($guru->canCreateAspirasi() && !$guru->canManageAspirasi()) {
             $query->whereHas('aspirasi', fn($q) => $q->where('user_id', Auth::id()));
-            $aspirasiSelesai = Aspirasi::where('status', 'Selesai')->count();
         }
 
         if ($request->filled('date_from')) {
@@ -305,10 +301,20 @@ class AspirasiController extends Controller
             $query->whereDate('created_at', '<=', $request->date_to);
         }
 
+        // Koleksi aspirasi selesai (bukan count) karena blade melakukan @foreach
+        $aspirasiSelesai = Aspirasi::with(['kategori', 'ruangan', 'historyStatus.pengubah'])
+            ->where('status', 'Selesai')
+            ->when($guru->canCreateAspirasi() && !$guru->canManageAspirasi(), function ($q) {
+                $q->where('user_id', Auth::id());
+            })
+            ->latest()
+            ->get();
+
         return view('guru.history', [
-            'guru' => $guru,
-            'history' => $query->latest()->paginate(20),
-            'currentType' => 'semua',
+            'guru'            => $guru,
+            'history'         => $query->latest()->paginate(20),
+            'currentType'     => 'semua',
+            'aspirasiSelesai' => $aspirasiSelesai,
         ]);
     }
 }

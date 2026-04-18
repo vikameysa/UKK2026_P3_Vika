@@ -12,6 +12,19 @@
                 </a>
             </li>
 
+            <li class="nav-label">Menu Aspirasi</li>
+
+            <li>
+                <a href="{{ route('Pengaduan.pengaduan') }}" aria-expanded="false">
+                    <i class="icon-note menu-icon"></i><span class="nav-text">Data Aspirasi</span>
+                </a>
+            </li>  
+            <li>
+                <a href="{{ route('petugas.aspirasi.index') }}" aria-expanded="false">
+                    <i class="icon-note menu-icon"></i><span class="nav-text">History Aspirasi</span>
+                </a>
+            </li>        
+
             </li>
                 
             

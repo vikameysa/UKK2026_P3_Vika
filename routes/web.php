@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\PetugasController;
@@ -17,9 +18,9 @@ Route::get('/', function () {
     return view('auth.login');
 })->name('welcome');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
+Route::get('/dashboard', [AdminController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard');
 
 Route::get('/guru/dashboard', function () {
     return view('guru.dashboard');
@@ -140,3 +141,8 @@ Route::prefix('siswa')->group(function () {
 
     Route::get('/profile', [SiswaAspirasiController::class, 'profile'])->name('siswa.profile');
 });
+
+// ---- ASPIRASI ----
+Route::get('/aspirasi',               [PetugasController::class, 'index'])->name('petugas.aspirasi.index');
+Route::get('/aspirasi/{id}',          [PetugasController::class, 'detail'])->name('petugas.aspirasi.detail');
+Route::post('/aspirasi/{id}/progres', [PetugasController::class, 'updateProgres'])->name('petugas.aspirasi.progres');
