@@ -13,7 +13,6 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\Guru\AspirasiController as GuruAspirasiController;
 use App\Http\Controllers\Siswa\AspirasiController as SiswaAspirasiController;
-use App\Http\Controllers\Petugas\AspirasiController as PetugasAspirasiController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -31,10 +30,6 @@ Route::get('/siswa/dashboard', function () {
     return view('siswa.dashboard');
 })->name('siswa.dashboard');
 
-Route::get('/petugas/dashboard', function () {
-    return view('petugas.dashboard');
-})->name('petugas.dashboard');
-
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -45,8 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Untuk Guru
-// CRUD Guru
+// ==================== CRUD GURU (admin) ====================
 Route::get('/Guru', [GuruController::class, 'index'])->name('Guru.index');
 Route::get('/Guru/create', [GuruController::class, 'create'])->name('Guru.create');
 Route::post('/Guru/store', [GuruController::class, 'store'])->name('Guru.store');
@@ -54,7 +48,7 @@ Route::get('/Guru/edit/{id}', [GuruController::class, 'edit'])->name('Guru.edit'
 Route::put('/Guru/update/{id}', [GuruController::class, 'update'])->name('Guru.update');
 Route::delete('/Guru/{id}', [GuruController::class, 'destroy'])->name('Guru.destroy');
 
-// Untuk Siswa
+// ==================== CRUD SISWA (admin) ====================
 Route::get('/Siswa', [SiswaController::class, 'index'])->name('Siswa.siswa');
 Route::get('/Siswa/create', [SiswaController::class, 'create'])->name('Siswa.create');
 Route::post('/Siswa/store', [SiswaController::class, 'store'])->name('Siswa.store');
@@ -62,7 +56,7 @@ Route::get('/Siswa/edit/{id}', [SiswaController::class, 'edit'])->name('Siswa.ed
 Route::put('/Siswa/update/{id}', [SiswaController::class, 'update'])->name('Siswa.update');
 Route::delete('/Siswa/{id}', [SiswaController::class, 'destroy'])->name('Siswa.destroy');
 
-// Untuk Petugas
+// ==================== CRUD PETUGAS (admin) ====================
 Route::get('/Petugas', [PetugasController::class, 'index'])->name('Petugas.index');
 Route::get('/Petugas/create', [PetugasController::class, 'create'])->name('Petugas.create');
 Route::post('/Petugas/store', [PetugasController::class, 'store'])->name('Petugas.store');
@@ -70,8 +64,9 @@ Route::get('/Petugas/edit/{id}', [PetugasController::class, 'edit'])->name('Petu
 Route::put('/Petugas/update/{id}', [PetugasController::class, 'update'])->name('Petugas.update');
 Route::delete('/Petugas/{id}', [PetugasController::class, 'destroy'])->name('Petugas.destroy');
 
-// Master Data
-// Untuk Kategori
+// ==================== MASTER DATA ====================
+
+// Kategori
 Route::get('/Kategori', [KategoriController::class, 'index'])->name('Kategori.kategori');
 Route::get('/Kategori/create', [KategoriController::class, 'create'])->name('Kategori.create');
 Route::post('/Kategori/store', [KategoriController::class, 'store'])->name('Kategori.store');
@@ -79,7 +74,7 @@ Route::get('/Kategori/edit/{id}', [KategoriController::class, 'edit'])->name('Ka
 Route::put('/Kategori/update/{id}', [KategoriController::class, 'update'])->name('Kategori.update');
 Route::delete('/Kategori/{id}', [KategoriController::class, 'destroy'])->name('Kategori.destroy');
 
-// Untuk Kelas
+// Kelas
 Route::get('/Kelas', [KelasController::class, 'index'])->name('Kelas.kelas');
 Route::get('/Kelas/create', [KelasController::class, 'create'])->name('Kelas.create');
 Route::post('/Kelas/store', [KelasController::class, 'store'])->name('Kelas.store');
@@ -87,7 +82,7 @@ Route::get('/Kelas/edit/{id}', [KelasController::class, 'edit'])->name('Kelas.ed
 Route::put('/Kelas/update/{id}', [KelasController::class, 'update'])->name('Kelas.update');
 Route::delete('/Kelas/{id}', [KelasController::class, 'destroy'])->name('Kelas.destroy');
 
-//Untuk Jurusan
+// Jurusan
 Route::get('/Jurusan', [JurusanController::class, 'index'])->name('Jurusan.jurusan');
 Route::get('/Jurusan/create', [JurusanController::class, 'create'])->name('Jurusan.create');
 Route::post('/Jurusan/store', [JurusanController::class, 'store'])->name('Jurusan.store');
@@ -95,7 +90,7 @@ Route::get('/Jurusan/edit/{id}', [JurusanController::class, 'edit'])->name('Juru
 Route::put('/Jurusan/update/{id}', [JurusanController::class, 'update'])->name('Jurusan.update');
 Route::delete('/Jurusan/{id}', [JurusanController::class, 'destroy'])->name('Jurusan.destroy');
 
-//Untuk Ruangan
+// Ruangan
 Route::get('/Ruangan', [RuanganController::class, 'index'])->name('Ruangan.ruangan');
 Route::get('/Ruangan/create', [RuanganController::class, 'create'])->name('Ruangan.create');
 Route::post('/Ruangan/store', [RuanganController::class, 'store'])->name('Ruangan.store');
@@ -103,21 +98,16 @@ Route::get('/Ruangan/edit/{id}', [RuanganController::class, 'edit'])->name('Ruan
 Route::put('/Ruangan/update/{id}', [RuanganController::class, 'update'])->name('Ruangan.update');
 Route::delete('/Ruangan/{id}', [RuanganController::class, 'destroy'])->name('Ruangan.destroy');
 
-// Pengaduan/Aspirasi Management
+// ==================== PENGADUAN (admin) ====================
 Route::get('/Pengaduan', [PengaduanController::class, 'index'])->name('Pengaduan.pengaduan');
-Route::get('/pengaduan/{id}', [PengaduanController::class, 'show'])
-    ->name('Pengaduan.detail');
+Route::get('/Pengaduan/{id}', [PengaduanController::class, 'show'])->name('Pengaduan.detail');
 Route::post('/Pengaduan/{id}/status', [PengaduanController::class, 'updateStatus'])->name('Pengaduan.status');
 Route::post('/Pengaduan/{id}/feedback', [PengaduanController::class, 'storeFeedback'])->name('Pengaduan.feedback');
 Route::post('/Pengaduan/{id}/progres', [PengaduanController::class, 'storeProgres'])->name('Pengaduan.progres');
-Route::delete('/Pengaduan/{id}', [PengaduanController::class, 'destroy'])
-    ->name('Pengaduan.destroy');
-Route::get('/Pengaduan/{id}', [PengaduanController::class, 'show'])
-    ->name('Pengaduan.detail');
+Route::delete('/Pengaduan/{id}', [PengaduanController::class, 'destroy'])->name('Pengaduan.destroy');
 
-//aspirasi untuk guru
+// ==================== ASPIRASI GURU ====================
 Route::prefix('guru')->group(function () {
-
     Route::get('/aspirasi', [GuruAspirasiController::class, 'index'])->name('guru.aspirasi.index');
     Route::get('/aspirasi/create', [GuruAspirasiController::class, 'create'])->name('guru.aspirasi.create');
     Route::post('/aspirasi', [GuruAspirasiController::class, 'store'])->name('guru.aspirasi.store');
@@ -129,9 +119,8 @@ Route::prefix('guru')->group(function () {
     Route::get('/statistik', [GuruAspirasiController::class, 'statistik'])->name('guru.statistik');
 });
 
-//aspirasi untuk siswa
+// ==================== ASPIRASI SISWA ====================
 Route::prefix('siswa')->group(function () {
-
     Route::get('/aspirasi', [SiswaAspirasiController::class, 'index'])->name('siswa.aspirasi.index');
     Route::get('/aspirasi/create', [SiswaAspirasiController::class, 'create'])->name('siswa.aspirasi.create');
     Route::post('/aspirasi', [SiswaAspirasiController::class, 'store'])->name('siswa.aspirasi.store');
@@ -139,23 +128,16 @@ Route::prefix('siswa')->group(function () {
     Route::get('/status', [SiswaAspirasiController::class, 'status'])->name('siswa.aspirasi.status');
     Route::get('/history', [SiswaAspirasiController::class, 'history'])->name('siswa.aspirasi.history');
     Route::post('/aspirasi/{id}/feedback', [SiswaAspirasiController::class, 'storeFeedback'])->name('siswa.aspirasi.feedback');
-
     Route::get('/profile', [SiswaAspirasiController::class, 'profile'])->name('siswa.profile');
 });
 
-// ---- PETUGAS (CRUD) ----
-Route::get('/Petugas',             [PetugasController::class, 'index'])->name('Petugas.index');
-Route::get('/Petugas/create',      [PetugasController::class, 'create'])->name('Petugas.create');
-Route::post('/Petugas',            [PetugasController::class, 'store'])->name('Petugas.store');
-Route::get('/Petugas/{id}/edit',   [PetugasController::class, 'edit'])->name('Petugas.edit');
-Route::put('/Petugas/{id}',        [PetugasController::class, 'update'])->name('Petugas.update');
-Route::delete('/Petugas/{id}',     [PetugasController::class, 'destroy'])->name('Petugas.destroy');
-
-// ---- ASPIRASI PETUGAS ----
-Route::get('/petugas/dashboard',              [AspirasiPetugasController::class, 'dashboard'])->name('petugas.dashboard');
-Route::get('/aspirasi',                       [AspirasiPetugasController::class, 'index'])->name('petugas.aspirasi.index');
-Route::get('/aspirasi/{id}',                  [AspirasiPetugasController::class, 'detail'])->name('petugas.aspirasi.detail');
-Route::post('/aspirasi/{id}/progres',         [AspirasiPetugasController::class, 'storeProgres'])->name('petugas.aspirasi.progres');
-Route::post('/aspirasi/{id}/status',          [AspirasiPetugasController::class, 'updateStatus'])->name('petugas.aspirasi.status');
-Route::post('/aspirasi/{id}/feedback',        [AspirasiPetugasController::class, 'storeFeedback'])->name('petugas.aspirasi.feedback');
-Route::get('/petugas/history',                [AspirasiPetugasController::class, 'history'])->name('petugas.history');
+// ==================== ASPIRASI & DASHBOARD PETUGAS ====================
+Route::prefix('petugas')->group(function () {
+    Route::get('/dashboard', [PetugasController::class, 'dashboard'])->name('petugas.dashboard');
+    Route::get('/aspirasi', [PetugasController::class, 'aspirasi'])->name('petugas.aspirasi.index');
+    Route::get('/aspirasi/{id}', [PetugasController::class, 'detail'])->name('petugas.aspirasi.detail');
+    Route::post('/aspirasi/{id}/progres', [PetugasController::class, 'updateProgres'])->name('petugas.aspirasi.progres');
+    Route::put('/aspirasi/{id}/status', [PetugasController::class, 'updateStatus'])->name('petugas.aspirasi.status');
+    Route::post('/aspirasi/{id}/feedback', [PetugasController::class, 'storeFeedback'])->name('petugas.aspirasi.feedback');
+    Route::get('/history', [PetugasController::class, 'history'])->name('petugas.history');
+});
