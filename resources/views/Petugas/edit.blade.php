@@ -17,10 +17,11 @@
                         {{-- FOTO --}}
                         <div class="col-md-4 text-center">
 
-                            <img src="{{ $petugas->foto ? asset($petugas->foto) : '' }}"
+                            <img src="{{ $petugas->foto ? asset($petugas->foto) : asset('img/default-avatar.png') }}"
                                 width="130" height="130"
                                 style="border-radius:50%; object-fit:cover; border:3px solid #ddd;"
-                                class="mb-3">
+                                class="mb-3"
+                                id="preview-foto">
 
                             <div>
                                 <h6 class="mb-0">{{ $petugas->nama }}</h6>
@@ -59,7 +60,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label>Tanggal Lahir</label>
                                     <input type="date" name="tanggal_lahir" class="form-control"
-                                           value="{{ $petugas->tanggal_lahir }}">
+                                           value="{{ $petugas->tanggal_lahir ? $petugas->tanggal_lahir->format('Y-m-d') : '' }}">
                                 </div>
 
                                 <div class="col-md-6 mb-3">
@@ -84,7 +85,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label>Email</label>
                                     <input type="email" name="email" class="form-control"
-                                           value="{{ $petugas->user->email }}">
+                                           value="{{ $petugas->user->email ?? '' }}">
                                 </div>
 
                                 <div class="col-md-6 mb-3">
@@ -95,7 +96,8 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label>Foto</label>
-                                    <input type="file" name="foto" class="form-control" accept="image/*">
+                                    <input type="file" name="foto" class="form-control" accept="image/*"
+                                           onchange="previewFoto(this)">
                                 </div>
 
                             </div>
@@ -115,4 +117,15 @@
         </div>
     </div>
 </div>
+
+<script>
+function previewFoto(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => document.getElementById('preview-foto').src = e.target.result;
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+
 @endsection

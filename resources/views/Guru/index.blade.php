@@ -87,6 +87,12 @@
                                         </div>
 
                                         <div class="modal-body text-center">
+                                            
+                                            <img src="{{ $g->foto ? asset($g->foto) : asset('assets/images/avatar-1.jpg') }}"
+     width="120" height="120"
+     style="border-radius:50%; object-fit:cover; border:3px solid #ddd;"
+     class="mb-3">
+
                                             <p><strong>NIP:</strong> {{ $g->nip }}</p>
                                             <p><strong>Nama:</strong> {{ $g->nama }}</p>
                                             <p><strong>Mata Pelajaran:</strong> {{ $g->mata_pelajaran }}</p>
@@ -96,9 +102,6 @@
                                             <p><strong>Alamat:</strong> {{ $g->alamat }}</p>
                                             <p><strong>Email:</strong> {{ $g->user->email ?? '-' }}</p>
 
-                                            <img src="{{ $g->foto ? asset('storage/'.$g->foto) : asset('assets/images/avatar-1.jpg') }}"
-                                                width="120" height="120"
-                                                style="border-radius:50%; object-fit:cover; border:3px solid #ddd;">
                                         </div>
 
                                         <div class="modal-footer">

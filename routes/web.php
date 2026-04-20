@@ -13,6 +13,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\Guru\AspirasiController as GuruAspirasiController;
 use App\Http\Controllers\Siswa\AspirasiController as SiswaAspirasiController;
+use App\Http\Controllers\Petugas\AspirasiController as PetugasAspirasiController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -142,7 +143,19 @@ Route::prefix('siswa')->group(function () {
     Route::get('/profile', [SiswaAspirasiController::class, 'profile'])->name('siswa.profile');
 });
 
-// ---- ASPIRASI ----
-Route::get('/aspirasi',               [PetugasController::class, 'index'])->name('petugas.aspirasi.index');
-Route::get('/aspirasi/{id}',          [PetugasController::class, 'detail'])->name('petugas.aspirasi.detail');
-Route::post('/aspirasi/{id}/progres', [PetugasController::class, 'updateProgres'])->name('petugas.aspirasi.progres');
+// ---- PETUGAS (CRUD) ----
+Route::get('/Petugas',             [PetugasController::class, 'index'])->name('Petugas.index');
+Route::get('/Petugas/create',      [PetugasController::class, 'create'])->name('Petugas.create');
+Route::post('/Petugas',            [PetugasController::class, 'store'])->name('Petugas.store');
+Route::get('/Petugas/{id}/edit',   [PetugasController::class, 'edit'])->name('Petugas.edit');
+Route::put('/Petugas/{id}',        [PetugasController::class, 'update'])->name('Petugas.update');
+Route::delete('/Petugas/{id}',     [PetugasController::class, 'destroy'])->name('Petugas.destroy');
+
+// ---- ASPIRASI PETUGAS ----
+Route::get('/petugas/dashboard',              [AspirasiPetugasController::class, 'dashboard'])->name('petugas.dashboard');
+Route::get('/aspirasi',                       [AspirasiPetugasController::class, 'index'])->name('petugas.aspirasi.index');
+Route::get('/aspirasi/{id}',                  [AspirasiPetugasController::class, 'detail'])->name('petugas.aspirasi.detail');
+Route::post('/aspirasi/{id}/progres',         [AspirasiPetugasController::class, 'storeProgres'])->name('petugas.aspirasi.progres');
+Route::post('/aspirasi/{id}/status',          [AspirasiPetugasController::class, 'updateStatus'])->name('petugas.aspirasi.status');
+Route::post('/aspirasi/{id}/feedback',        [AspirasiPetugasController::class, 'storeFeedback'])->name('petugas.aspirasi.feedback');
+Route::get('/petugas/history',                [AspirasiPetugasController::class, 'history'])->name('petugas.history');

@@ -41,21 +41,21 @@
 
                                 {{-- FOTO --}}
                                 <td>
-                                    <img src="{{ $p->petugas?->foto ? asset($p->petugas->foto) : '' }}"
+                                    <img src="{{ $p->foto ? asset($p->foto) : '' }}"
                                         width="45" height="45"
                                         style="border-radius:50%; object-fit:cover; border:2px solid #ddd;">
                                 </td>
 
-                                <td>{{ $p->petugas->nip ?? '-' }}</td>
-                                <td>{{ $p->petugas->nama ?? '-' }}</td>
+                                <td>{{ $p->nip ?? '-' }}</td>
+                                <td>{{ $p->nama ?? '-' }}</td>
                                 <td>
-                                    {{ ($p->petugas->jenis_kelamin ?? '') == 'L' ? 'Laki-laki' : 'Perempuan' }}
+                                    {{ ($p->jenis_kelamin ?? '') == 'L' ? 'Laki-laki' : 'Perempuan' }}
                                 </td>
-                                <td>{{ $p->email }}</td>
+                                <td>{{ $p->user->email ?? '-' }}</td>
 
                                 <td>
-                                    <span class="badge {{ ($p->petugas->status ?? 'aktif') == 'aktif' ? 'bg-success' : 'bg-secondary' }}">
-                                        {{ ucfirst($p->petugas->status ?? 'Aktif') }}
+                                    <span class="badge {{ ($p->status ?? 'aktif') == 'aktif' ? 'bg-success' : 'bg-secondary' }}">
+                                        {{ ucfirst($p->status ?? 'Aktif') }}
                                     </span>
                                 </td>
 
@@ -71,17 +71,15 @@
                                         </button>
 
                                         {{-- EDIT --}}
-                                        <a href="{{ route('Petugas.edit', $p->petugas->id) }}"
-                                            class="btn btn-outline-warning btn-sm">
+                                        <a href="{{ route('Petugas.edit', $p->id) }}" class="btn btn-outline-warning btn-sm">
                                             Edit
                                         </a>
 
                                         {{-- DELETE --}}
                                         <form method="POST"
-                                            action="{{ route('Petugas.destroy', $p->petugas->id) }}">
+                                            action="{{ route('Petugas.destroy', $p->id) }}">
                                             @csrf
                                             @method('DELETE')
-
                                             <button type="submit"
                                                 class="btn btn-outline-danger btn-sm"
                                                 onclick="return confirm('Yakin hapus data ini?')">
@@ -105,23 +103,19 @@
 
                                         <div class="modal-body text-center">
 
-                                            <img src="{{ $p->petugas?->foto ? asset($p->petugas->foto) : '' }}"
+                                            <img src="{{ $p->foto ? asset($p->foto) : '' }}"
                                                 width="120" height="120"
                                                 style="border-radius:50%; object-fit:cover; border:3px solid #ddd;">
 
                                             <hr>
 
-                                            <p><strong>NIP:</strong> {{ $p->petugas->nip ?? '-' }}</p>
-                                            <p><strong>Nama:</strong> {{ $p->petugas->nama ?? '-' }}</p>
-                                            <p><strong>Jenis Kelamin:</strong>
-                                                {{ $p->petugas->jenis_kelamin ?? '-' }}
-                                            </p>
-                                            <p><strong>Tanggal Lahir:</strong>
-                                                {{ $p->petugas->tanggal_lahir ?? '-' }}
-                                            </p>
-                                            <p><strong>No HP:</strong> {{ $p->petugas->no_hp ?? '-' }}</p>
-                                            <p><strong>Alamat:</strong> {{ $p->petugas->alamat ?? '-' }}</p>
-                                            <p><strong>Email:</strong> {{ $p->email ?? '-' }}</p>
+                                            <p><strong>NIP:</strong> {{ $p->nip ?? '-' }}</p>
+                                            <p><strong>Nama:</strong> {{ $p->nama ?? '-' }}</p>
+                                            <p><strong>Jenis Kelamin:</strong> {{ $p->jenis_kelamin ?? '-' }}</p>
+                                            <p><strong>Tanggal Lahir:</strong> {{ $p->tanggal_lahir ?? '-' }}</p>
+                                            <p><strong>No HP:</strong> {{ $p->no_hp ?? '-' }}</p>
+                                            <p><strong>Alamat:</strong> {{ $p->alamat ?? '-' }}</p>
+                                            <p><strong>Email:</strong> {{ $p->user->email ?? '-' }}</p>
 
                                         </div>
 
