@@ -10,7 +10,6 @@
                     <h3 class="card-title mb-4">Dashboard Admin</h3>
                     
                     <div class="row">
-                        <!-- Profile Card -->
                         <div class="col-lg-3 col-sm-6 mb-4">
                             <div class="card gradient-1">
                                 <div class="card-body">
@@ -22,7 +21,6 @@
                             </div>
                         </div>
 
-                        <!-- Total Siswa -->
                         <div class="col-lg-3 col-sm-6 mb-4">
                             <div class="card gradient-2">
                                 <div class="card-body">
@@ -33,7 +31,6 @@
                             </div>
                         </div>
 
-                        <!-- Total Guru -->
                         <div class="col-lg-3 col-sm-6 mb-4">
                             <div class="card gradient-3">
                                 <div class="card-body">
@@ -48,7 +45,6 @@
 
                     <hr class="my-4">
 
-                    <!-- Quick Actions -->
                     <div class="row mt-4">
                         <div class="col-12">
                             <h5 class="mb-3">Menu Cepat</h5>
@@ -77,7 +73,6 @@
 
                     <hr class="my-4">
 
-                    <!-- Recent Activity / Antrian Info -->
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <h5 class="mb-3">Informasi Penting</h5>

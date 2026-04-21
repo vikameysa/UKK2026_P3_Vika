@@ -9,15 +9,12 @@ class Ruangan extends Model
 {
     use HasFactory;
 
-    // Nama tabel
     protected $table = 'ruangan';
 
-    // Primary key custom
     protected $primaryKey = 'id_ruangan';
     public $incrementing = true;
     protected $keyType = 'int';
 
-    // Mass assignment
     protected $fillable = [
         'kode_ruangan',
         'nama_ruangan',
@@ -28,25 +25,14 @@ class Ruangan extends Model
         'deskripsi'
     ];
 
-    // Timestamp aktif
     public $timestamps = true;
 
-    /*
-    |--------------------------------------------------------------------------
-    | RELATIONSHIP
-    |--------------------------------------------------------------------------
-    */
 
     public function aspirasi()
     {
         return $this->hasMany(Aspirasi::class, 'id_ruangan', 'id_ruangan');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | ACCESSOR
-    |--------------------------------------------------------------------------
-    */
 
     public function getStatusBadgeAttribute()
     {

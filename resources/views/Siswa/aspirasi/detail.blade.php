@@ -4,10 +4,54 @@
 <div class="row">
     <div class="col-md-8">
         <div class="card">
-            <div class="card-header bg-info text-white">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
                 <h6 class="mb-0">Detail Aspirasi #{{ $aspirasi->id_aspirasi }}</h6>
+                @if($aspirasi->status == 'Selesai')
+                <a href="{{ route('siswa.aspirasi.export-single-pdf', $aspirasi->id_aspirasi) }}" class="btn btn-light btn-sm text-danger fw-semibold">
+                    <i class="ph ph-file-pdf"></i> Download PDF
+                </a>
+                @endif
             </div>
             <div class="card-body">
+
+                <!-- STEPPER STATUS -->
+                <div class="mb-4">
+                    @php
+                        $steps = ['Menunggu', 'Proses', 'Selesai'];
+                        $currentIndex = array_search($aspirasi->status, $steps);
+                    @endphp
+                    <div class="d-flex align-items-center justify-content-center gap-0">
+                        @foreach($steps as $i => $step)
+                            {{-- Lingkaran --}}
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                                    style="
+                                        width: 38px; height: 38px; font-size: 13px;
+                                        background: {{ $i <= $currentIndex ? ($step == 'Selesai' ? '#198754' : ($step == 'Proses' ? '#0dcaf0' : '#ffc107')) : '#e9ecef' }};
+                                        color: {{ $i <= $currentIndex ? 'white' : '#adb5bd' }};
+                                        border: 2px solid {{ $i <= $currentIndex ? ($step == 'Selesai' ? '#198754' : ($step == 'Proses' ? '#0dcaf0' : '#ffc107')) : '#dee2e6' }};
+                                    ">
+                                    @if($i < $currentIndex)
+                                        <i class="ph ph-check"></i>
+                                    @else
+                                        {{ $i + 1 }}
+                                    @endif
+                                </div>
+                                <small class="mt-1 fw-semibold" style="font-size: 11px; color: {{ $i <= $currentIndex ? '#333' : '#adb5bd' }}">
+                                    {{ $step }}
+                                </small>
+                            </div>
+                            {{-- Garis penghubung --}}
+                            @if(!$loop->last)
+                            <div style="
+                                height: 3px; width: 80px; margin-bottom: 18px;
+                                background: {{ $i < $currentIndex ? '#198754' : '#dee2e6' }};
+                            "></div>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+
                 <!-- NOTIFIKASI SELESAI -->
                 @if($aspirasi->status == 'Selesai')
                 <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
@@ -101,9 +145,14 @@
             <div class="card-body text-center">
                 <i class="ph ph-smiley ph-2x text-success mb-2"></i>
                 <p>Terima kasih atas partisipasi Anda dalam menjaga sarana sekolah.</p>
-                <a href="{{ route('siswa.aspirasi.create') }}" class="btn btn-sm btn-primary">
-                    <i class="ph ph-plus"></i> Buat Aspirasi Baru
-                </a>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="{{ route('siswa.aspirasi.create') }}" class="btn btn-sm btn-primary">
+                        <i class="ph ph-plus"></i> Buat Aspirasi Baru
+                    </a>
+                    <a href="{{ route('siswa.aspirasi.export-single-pdf', $aspirasi->id_aspirasi) }}" class="btn btn-sm btn-danger">
+                        <i class="ph ph-file-pdf"></i> Download PDF Bukti
+                    </a>
+                </div>
             </div>
         </div>
         @endif

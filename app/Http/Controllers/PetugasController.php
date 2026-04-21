@@ -16,9 +16,6 @@ use App\Models\Ruangan;
 
 class PetugasController extends Controller
 {
-    // ============================================================
-    //  CRUD PETUGAS (untuk admin) — route: /Petugas
-    // ============================================================
 
     public function index()
     {
@@ -124,10 +121,6 @@ class PetugasController extends Controller
         return redirect()->route('Petugas.index')->with('success', 'Petugas berhasil dihapus.');
     }
 
-    // ============================================================
-    //  ASPIRASI PETUGAS — route: /petugas/aspirasi
-    // ============================================================
-
     public function aspirasi(Request $request)
     {
         $query = Aspirasi::with(['user.siswa', 'user.guru', 'kategori', 'ruangan'])
@@ -209,10 +202,6 @@ class PetugasController extends Controller
 
         return back()->with('success', 'Status berhasil diupdate.');
     }
-
-    // ============================================================
-    //  DASHBOARD & HISTORY
-    // ============================================================
 
     public function dashboard()
     {

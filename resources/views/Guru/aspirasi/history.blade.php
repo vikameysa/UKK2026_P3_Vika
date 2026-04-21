@@ -67,13 +67,8 @@
         border: none;
     }
 
-    .btn-detail:hover {
-        background: #dbeafe;
-    }
-
-    .btn-history:hover {
-        background: #e2e8f0;
-    }
+    .btn-detail:hover { background: #dbeafe; }
+    .btn-history:hover { background: #e2e8f0; }
 
     /* ===== BADGE ===== */
     .badge-status {
@@ -112,29 +107,25 @@
         border-radius: 50%;
     }
 
-    .success {
-        background: #22c55e;
-    }
+    .success { background: #22c55e; }
+    .warning { background: #facc15; }
+    .danger  { background: #ef4444; }
 
-    .warning {
-        background: #facc15;
-    }
-
-    .danger {
-        background: #ef4444;
-    }
-
-    .timeline-content {
-        margin-left: 20px;
-    }
+    .timeline-content { margin-left: 20px; }
 </style>
 
 <div class="container-fluid">
 
-    {{-- HEADER --}}
-    <div class="page-header-custom">
-        <h4>Riwayat Aspirasi</h4>
-        <p>Daftar aspirasi yang telah selesai atau ditolak</p>
+    <div class="page-header-custom d-flex justify-content-between align-items-center">
+        <div>
+            <h4>Riwayat Aspirasi</h4>
+            <p>Daftar aspirasi yang telah selesai atau ditolak</p>
+        </div>
+        @if($aspirasiSelesai->count() > 0)
+        <a href="{{ route('guru.aspirasi.export-pdf') }}" class="btn btn-light btn-sm text-success fw-semibold">
+            <i class="ph ph-file-pdf"></i> Export Semua PDF
+        </a>
+        @endif
     </div>
 
     <div class="card card-custom p-3">
@@ -157,97 +148,41 @@
                 </thead>
 
                 <tbody>
-                    @forelse($histories as $index => $aspirasi)
+                    @forelse($aspirasiSelesai as $index => $aspirasi)
                     <tr>
-
-                        <td>{{ $index + $histories->firstItem() }}</td>
-
-                        <td><b>#{{ $aspirasi->id }}</b></td>
-
+                        <td>{{ $index + 1 }}</td>
+                        <td><b>#{{ $aspirasi->id_aspirasi }}</b></td>
                         <td>{{ $aspirasi->kategori->nama_kategori ?? '-' }}</td>
-
                         <td>{{ $aspirasi->ruangan->nama_ruangan ?? $aspirasi->lokasi }}</td>
-
                         <td style="max-width:200px;">
                             {{ \Illuminate\Support\Str::limit($aspirasi->keterangan, 50) }}
                         </td>
-
                         <td>{{ $aspirasi->updated_at->format('d M Y') }}</td>
-
                         <td>
-                            <span class="badge-status 
-                                {{ $aspirasi->status == 'selesai' ? 'bg-success' : 'bg-danger' }}">
-                                {{ ucfirst($aspirasi->status) }}
-                            </span>
+                            <span class="badge-status bg-success text-white">Selesai</span>
                         </td>
-
                         <td class="text-center">
                             <button class="btn btn-action btn-history"
                                 data-bs-toggle="modal"
-                                data-bs-target="#historyModal{{ $aspirasi->id }}">
+                                data-bs-target="#historyModal{{ $aspirasi->id_aspirasi }}">
                                 Riwayat
                             </button>
                         </td>
-
                         <td class="text-center">
-                            <a href="{{ route('guru.aspirasi.detail', $aspirasi->id_aspirasi) }}"
-                                class="btn btn-action btn-detail">
-                                Detail
-                            </a>
+                            <div class="d-flex gap-1 justify-content-center">
+                                <a href="{{ route('guru.aspirasi.detail', $aspirasi->id_aspirasi) }}"
+                                    class="btn btn-action btn-detail">
+                                    Detail
+                                </a>
+                                <a href="{{ route('guru.aspirasi.export-single-pdf', $aspirasi->id_aspirasi) }}"
+                                    class="btn btn-action btn-sm btn-danger"
+                                    title="Download PDF">
+                                    <i class="ph ph-file-pdf"></i> PDF
+                                </a>
+                            </div>
                         </td>
-
                     </tr>
 
-                    {{-- MODAL --}}
-                    <div class="modal fade" id="historyModal{{ $aspirasi->id }}">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-
-                                <div class="modal-header bg-primary text-white">
-                                    <h5 class="modal-title">
-                                        Riwayat Status #{{ $aspirasi->id }}
-                                    </h5>
-                                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                </div>
-
-                                <div class="modal-body">
-
-                                    <div class="timeline">
-                                        @forelse($aspirasi->historyStatus as $history)
-                                        <div class="timeline-item">
-
-                                            <div class="timeline-dot 
-                                                {{ $history->status_baru == 'selesai' ? 'success' : ($history->status_baru == 'proses' ? 'warning' : 'danger') }}">
-                                            </div>
-
-                                            <div class="timeline-content">
-                                                <strong>
-                                                    {{ ucfirst($history->status_lama) }} →
-                                                    {{ ucfirst($history->status_baru) }}
-                                                </strong><br>
-
-                                                <small class="text-muted">
-                                                    {{ $history->created_at->format('d M Y H:i') }}
-                                                </small>
-                                            </div>
-
-                                        </div>
-                                        @empty
-                                        <p class="text-muted">Belum ada riwayat</p>
-                                        @endforelse
-                                    </div>
-
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button class="btn btn-secondary" data-bs-dismiss="modal">
-                                        Tutup
-                                    </button>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
 
                     @empty
                     <tr>
@@ -261,9 +196,8 @@
             </table>
         </div>
 
-        {{-- PAGINATION --}}
         <div class="mt-3 d-flex justify-content-center">
-            {{ $histories->links() }}
+            {{ $aspirasiSelesai->links() }}
         </div>
 
     </div>

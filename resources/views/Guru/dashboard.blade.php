@@ -48,7 +48,6 @@
                                 <td>{{ $g->no_hp }}</td>
                                 <td>
                                     <div class="d-flex gap-2">
-                                        {{-- FIXED: was data-target="#modalDokter{{ $s->id }}" --}}
                                         <button type="button" class="btn btn-outline-primary btn-sm"
                                             data-toggle="modal"
                                             data-target="#modalGuru{{ $g->id }}">
@@ -66,7 +65,6 @@
                                 </td>
                             </tr>
 
-                            {{-- MODAL DETAIL --}}
                             <div class="modal fade" id="modalGuru{{ $g->id }}" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">

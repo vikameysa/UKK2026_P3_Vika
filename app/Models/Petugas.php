@@ -25,13 +25,11 @@ class Petugas extends Model
         'foto',
     ];
 
-    //RELASI KE USER
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // (opsional) biar tanggal otomatis jadi Carbon
     protected $casts = [
         'tanggal_lahir' => 'date',
     ];

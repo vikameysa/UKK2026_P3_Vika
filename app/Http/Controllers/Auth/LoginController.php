@@ -15,16 +15,13 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        // validasi
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        // ambil data
         $credentials = $request->only('email', 'password');
 
-        // cek login
         if (Auth::attempt($credentials)) {
             return redirect('/dashboard');
         }

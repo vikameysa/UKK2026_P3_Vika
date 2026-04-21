@@ -5,23 +5,17 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <h4 class="mb-4">Tambah Ruangan</h4>
-
             <form action="{{ route('Ruangan.store') }}" method="POST">
                 @csrf
-
-                {{-- Kode --}}
                 <div class="mb-3">
                     <label>Kode Ruangan</label>
                     <input type="text" name="kode_ruangan" class="form-control">
                 </div>
 
-                {{-- Nama --}}
                 <div class="mb-3">
                     <label>Nama Ruangan</label>
                     <input type="text" name="nama_ruangan" class="form-control">
                 </div>
-
-                {{-- Jenis --}}
                 <div class="mb-3">
                     <label>Jenis Ruangan</label>
                     <select name="jenis_ruangan" class="form-control">
@@ -34,20 +28,15 @@
                         <option value="Lainnya">Lainnya</option>
                     </select>
                 </div>
-
-                {{-- Lokasi --}}
                 <div class="mb-3">
                     <label>Lokasi</label>
                     <input type="text" name="lokasi" class="form-control">
                 </div>
 
-                {{-- Kapasitas --}}
                 <div class="mb-3">
                     <label>Kapasitas</label>
                     <input type="number" name="kapasitas" class="form-control">
                 </div>
-
-                {{-- Kondisi --}}
                 <div class="mb-3">
                     <label>Kondisi</label>
                     <select name="kondisi" class="form-control">
@@ -58,18 +47,14 @@
                         <option value="Dalam Perbaikan">Dalam Perbaikan</option>
                     </select>
                 </div>
-
-                {{-- Deskripsi --}}
                 <div class="mb-3">
                     <label>Deskripsi</label>
                     <textarea name="deskripsi" class="form-control"></textarea>
                 </div>
-
                 <div class="d-flex gap-2">
                     <button class="btn btn-primary">Simpan</button>
                     <a href="{{ route('Ruangan.ruangan') }}" class="btn btn-secondary">Batal</a>
                 </div>
-
             </form>
         </div>
     </div>

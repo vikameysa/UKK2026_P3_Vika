@@ -20,9 +20,6 @@ class SiswaController extends Controller
         return view('siswa.create');
     }
 
-    // =========================
-    // STORE
-    // =========================
     public function store(Request $request)
     {
         $request->validate([
@@ -39,14 +36,12 @@ class SiswaController extends Controller
             'foto'          => 'nullable|image|max:2048',
         ]);
 
-        // 1. BUAT USER
         $user = User::create([
             'email'    => $request->email,
             'password' => Hash::make($request->password),
             'role'     => 'siswa',
         ]);
 
-        // 2. UPLOAD FOTO
         $fotoPath = null;
         if ($request->hasFile('foto')) {
             $file     = $request->file('foto');
@@ -55,7 +50,6 @@ class SiswaController extends Controller
             $fotoPath = 'assets/images/siswa/' . $filename;
         }
 
-        // 3. SIMPAN SISWA
         Siswa::create([
             'user_id'       => $user->id,
             'nis'           => $request->nis,
@@ -73,18 +67,12 @@ class SiswaController extends Controller
             ->with('success', 'Data siswa berhasil ditambahkan.');
     }
 
-    // =========================
-    // EDIT
-    // =========================
     public function edit($id)
     {
         $siswa = Siswa::with('user')->findOrFail($id);
         return view('siswa.edit', compact('siswa'));
     }
 
-    // =========================
-    // UPDATE
-    // =========================
     public function update(Request $request, $id)
     {
         $siswa = Siswa::with('user')->findOrFail($id);
@@ -103,17 +91,14 @@ class SiswaController extends Controller
             'foto'          => 'nullable|image|max:2048',
         ]);
 
-        // 1. UPDATE USER
         $dataUser = ['email' => $request->email];
         if ($request->filled('password')) {
             $dataUser['password'] = Hash::make($request->password);
         }
         $siswa->user->update($dataUser);
 
-        // 2. UPLOAD FOTO BARU (jika ada)
         $fotoPath = $siswa->foto;
         if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada
             if ($siswa->foto && file_exists(public_path($siswa->foto))) {
                 unlink(public_path($siswa->foto));
             }
@@ -123,7 +108,6 @@ class SiswaController extends Controller
             $fotoPath = 'assets/images/siswa/' . $filename;
         }
 
-        // 3. UPDATE SISWA
         $siswa->update([
             'nis'           => $request->nis,
             'nama'          => $request->nama,
@@ -140,19 +124,15 @@ class SiswaController extends Controller
             ->with('success', 'Data siswa berhasil diperbarui.');
     }
 
-    // =========================
-    // DESTROY
-    // =========================
+
     public function destroy($id)
     {
         $siswa = Siswa::with('user')->findOrFail($id);
 
-        // Hapus foto jika ada
         if ($siswa->foto && file_exists(public_path($siswa->foto))) {
             unlink(public_path($siswa->foto));
         }
 
-        // Hapus user terkait (siswa ikut terhapus via cascade / observer)
         $siswa->user->delete();
 
         return redirect()->route('Siswa.siswa')

@@ -14,7 +14,6 @@
 
                     <div class="row">
 
-                        {{-- FOTO --}}
                         <div class="col-md-4 text-center">
 
                             <img src="{{ $petugas->foto ? asset($petugas->foto) : asset('img/default-avatar.png') }}"
@@ -32,7 +31,6 @@
 
                         </div>
 
-                        {{-- FORM --}}
                         <div class="col-md-8">
 
                             <div class="row">

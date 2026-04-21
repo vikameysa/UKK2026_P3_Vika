@@ -134,7 +134,7 @@
     </div>
 </div>
 
-<!-- Modal Delete untuk setiap aspirasi -->
+
 @foreach($aspirasi as $a)
 <div class="modal fade" id="deleteModal{{ $a->id_aspirasi }}" tabindex="-1">
     <div class="modal-dialog">

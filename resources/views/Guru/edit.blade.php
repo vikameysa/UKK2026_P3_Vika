@@ -31,20 +31,20 @@
 
             <input name="password" type="password" class="form-control mb-2">
 
-            {{-- KOLOM KANAN - FOTO --}}
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Foto Saat Ini</label>
-                                                        <div class="mb-3 text-center">
-                                                            <img src="{{ $guru->foto ? asset($guru->foto) : asset('assets/images/guru/') }}"
-                                                                width="120" height="120"
-                                                                style="border-radius:50%; object-fit:cover; border:3px solid #ddd;">
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <label class="form-label">Ganti Foto</label>
-                                                            <input type="file" name="foto" class="form-control" accept="image/*">
-                                                            <small class="text-muted">Kosongkan jika tidak ingin mengganti. Maks 2MB.</small>
-                                                        </div>
-                                                    </div>
+
+               <div class="col-md-6">
+                    <label class="form-label">Foto Saat Ini</label>
+                        <div class="mb-3 text-center">
+                            <img src="{{ $guru->foto ? asset($guru->foto) : asset('assets/images/guru/') }}"
+                                    width="120" height="120"
+                                    style="border-radius:50%; object-fit:cover; border:3px solid #ddd;">
+                        </div>
+                    <div class="mb-2">
+                        <label class="form-label">Ganti Foto</label>
+                        <input type="file" name="foto" class="form-control" accept="image/*">
+                        <small class="text-muted">Kosongkan jika tidak ingin mengganti. Maks 2MB.</small>
+                    </div>
+                </div>
 
             <button class="btn btn-primary">Update</button>
         </form>

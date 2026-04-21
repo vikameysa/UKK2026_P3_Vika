@@ -10,7 +10,6 @@
             </div>
             <div class="card-body">
                 
-                <!-- Filter -->
                 <form method="GET" class="row g-3 mb-4">
                     <div class="col-md-2">
                         <label class="form-label">Status</label>
@@ -138,7 +137,6 @@
     </div>
 </div>
 
-<!-- Modal Delete untuk setiap aspirasi -->
 @foreach($aspirasi as $a)
 <div class="modal fade" id="deleteModal{{ $a->id_aspirasi }}" tabindex="-1">
     <div class="modal-dialog">

@@ -37,7 +37,6 @@
             </div>
         </div>
 
-        <!-- Form Feedback & Progres untuk Admin -->
         <div class="card mt-3">
             <div class="card-header bg-primary text-white">
                 <h6 class="mb-0"><i class="ph ph-chat"></i> Kelola Aspirasi (Admin)</h6>
@@ -68,8 +67,7 @@
                 </form>
                 
                 <hr>
-                
-                <!-- FORM UPDATE STATUS DENGAN FOTO -->
+
                 <form action="{{ route('Pengaduan.status', $aspirasi->id_aspirasi) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
@@ -81,15 +79,13 @@
                                 <option value="Selesai" {{ $aspirasi->status == 'Selesai' ? 'selected' : '' }}>Selesai</option>
                             </select>
                         </div>
-                        
-                        <!-- Form Keterangan (wajib jika status Selesai) -->
+
                         <div class="col-md-12 mb-3" id="keteranganDiv">
                             <label class="form-label">Keterangan Penanganan <span class="text-danger" id="keteranganRequired" style="display: none;">*</span></label>
                             <textarea name="keterangan_progres" class="form-control" rows="3" id="keteranganText" placeholder="Jelaskan tindakan yang telah dilakukan..."></textarea>
                             <small class="text-muted">Isikan keterangan detail tentang penanganan aspirasi</small>
                         </div>
                         
-                        <!-- Upload Foto (wajib jika status Selesai) -->
                         <div class="col-md-12 mb-3" id="fotoDiv">
                             <label class="form-label">Foto Bukti Penanganan <span class="text-danger" id="fotoRequired" style="display: none;">*</span></label>
                             <input type="file" name="foto_bukti" class="form-control" id="fotoBukti" accept="image/jpeg,image/png,image/jpg">
@@ -115,7 +111,6 @@
     </div>
 
     <div class="col-md-4">
-        <!-- Riwayat Progres -->
         <div class="card">
             <div class="card-header">
                 <h6 class="mb-0"><i class="ph ph-list"></i> Riwayat Progres</h6>
@@ -132,8 +127,7 @@
                 @endforelse
             </div>
         </div>
-        
-        <!-- Riwayat Status -->
+
         <div class="card mt-3">
             <div class="card-header">
                 <h6 class="mb-0"><i class="ph ph-clock-counter-clockwise"></i> Riwayat Status</h6>
@@ -155,7 +149,6 @@
 
 @push('scripts')
 <script>
-    // Preview foto
     document.getElementById('fotoBukti').addEventListener('change', function(e) {
         const preview = document.getElementById('fotoPreview');
         const img = document.getElementById('previewImg');
@@ -172,7 +165,6 @@
         }
     });
     
-    // Status change handler
     const statusSelect = document.getElementById('statusSelect');
     const keteranganDiv = document.getElementById('keteranganDiv');
     const fotoDiv = document.getElementById('fotoDiv');
@@ -187,32 +179,25 @@
         const isSelesai = statusSelect.value === 'Selesai';
         
         if (isSelesai) {
-            // Tampilkan peringatan
             warningAlert.style.display = 'block';
-            
-            // Tambahkan required attribute
+
             keteranganText.required = true;
             fotoBukti.required = true;
             
-            // Tampilkan tanda bintang merah
             keteranganRequired.style.display = 'inline';
             fotoRequired.style.display = 'inline';
             
-            // Validasi form
             validateForm();
         } else {
-            // Sembunyikan peringatan
+
             warningAlert.style.display = 'none';
-            
-            // Hapus required attribute
+
             keteranganText.required = false;
             fotoBukti.required = false;
-            
-            // Sembunyikan tanda bintang merah
+
             keteranganRequired.style.display = 'none';
             fotoRequired.style.display = 'none';
-            
-            // Hapus class is-invalid
+
             keteranganText.classList.remove('is-invalid');
             fotoBukti.classList.remove('is-invalid');
         }
@@ -254,8 +239,7 @@
             }
         }
     });
-    
-    // Initial check
+
     checkStatus();
 </script>
 @endpush

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class HistoryStatus extends Model
 {
-    const UPDATED_AT = null; // ← matikan updated_at
+    const UPDATED_AT = null; 
 
     protected $table = 'history_status';
 

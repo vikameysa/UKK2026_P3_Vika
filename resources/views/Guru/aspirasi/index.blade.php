@@ -90,6 +90,70 @@
                 </div>
                 @endif
 
+                {{-- FILTER BAR --}}
+                <form method="GET" action="{{ route('guru.aspirasi.index') }}" class="mb-4">
+                    {{-- Pertahankan tab type untuk wali kelas --}}
+                    @if($guru->jabatan == 'Wali Kelas')
+                        <input type="hidden" name="type" value="{{ $currentType }}">
+                    @endif
+
+                    <div class="row g-2 align-items-end p-3 border rounded bg-light">
+                        <div class="col-auto d-flex align-items-center gap-2">
+                            <label class="mb-0 fw-semibold text-nowrap">Status</label>
+                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="">Semua</option>
+                                <option value="Menunggu" {{ request('status') == 'Menunggu' ? 'selected' : '' }}>Menunggu</option>
+                                <option value="Proses"   {{ request('status') == 'Proses'   ? 'selected' : '' }}>Proses</option>
+                            </select>
+                        </div>
+                        <div class="col-auto d-flex align-items-center gap-2">
+                            <label class="mb-0 fw-semibold text-nowrap">Kategori</label>
+                            <select name="kategori" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="">Semua</option>
+                                @foreach($kategoris as $k)
+                                    <option value="{{ $k->id_kategori }}" {{ request('kategori') == $k->id_kategori ? 'selected' : '' }}>
+                                        {{ $k->nama_kategori }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-auto d-flex align-items-center gap-2">
+                            <label class="mb-0 fw-semibold text-nowrap">Ruangan</label>
+                            <select name="ruangan" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="">Semua</option>
+                                @foreach($ruangans as $r)
+                                    <option value="{{ $r->id_ruangan }}" {{ request('ruangan') == $r->id_ruangan ? 'selected' : '' }}>
+                                        {{ $r->nama_ruangan }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-auto d-flex align-items-center gap-2">
+                            <label class="mb-0 fw-semibold text-nowrap">Dari Tgl</label>
+                            <input type="date" name="date_from" class="form-control form-control-sm"
+                                   value="{{ request('date_from') }}">
+                        </div>
+                        <div class="col-auto d-flex align-items-center gap-2">
+                            <label class="mb-0 fw-semibold text-nowrap">Sampai Tgl</label>
+                            <input type="date" name="date_to" class="form-control form-control-sm"
+                                   value="{{ request('date_to') }}">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary btn-sm px-4">
+                                <i class="ph ph-funnel"></i> Filter
+                            </button>
+                        </div>
+                        @if(request()->hasAny(['status','kategori','ruangan','date_from','date_to','search']))
+                        <div class="col-auto">
+                            <a href="{{ route('guru.aspirasi.index', $guru->jabatan == 'Wali Kelas' ? ['type' => $currentType] : []) }}"
+                               class="btn btn-secondary btn-sm">
+                                <i class="ph ph-arrow-counter-clockwise"></i> Reset
+                            </a>
+                        </div>
+                        @endif
+                    </div>
+                </form>
+
                 <!-- Tabel Aspirasi -->
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
@@ -145,7 +209,7 @@
                     </table>
                 </div>
 
-                {{ $aspirasi->links() }}
+                {{ $aspirasi->appends(request()->query())->links() }}
             </div>
         </div>
     </div>

@@ -11,8 +11,6 @@
                     + Tambah Kelas
                 </a>
             </div>
-
-            {{-- Alert sukses --}}
             @if(session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
@@ -38,8 +36,6 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $k->nama_kelas }}</td>
                                 <td>{{ $k->tingkat }}</td>
-
-                                {{-- RELASI JURUSAN --}}
                                 <td>
                                     {{ $k->jurusan->nama_jurusan ?? '-' }}
                                 </td>
@@ -49,13 +45,11 @@
 
                                 <td>
                                     <div class="d-flex gap-1">
-                                        {{-- Edit --}}
                                         <a href="{{ route('Kelas.edit', $k->id_kelas) }}"
                                            class="btn btn-warning btn-sm">
                                             Edit
                                         </a>
 
-                                        {{-- Hapus --}}
                                         <form action="{{ route('Kelas.destroy', $k->id_kelas) }}"
                                               method="POST"
                                               onsubmit="return confirm('Yakin hapus data?')">

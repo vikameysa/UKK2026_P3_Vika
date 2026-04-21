@@ -22,7 +22,7 @@ class Guru extends Model
         'alamat',
         'no_hp',
         'foto',
-        'jabatan', // pastikan kolom ini ada di tabel
+        'jabatan',
     ];
 
     public function user()
@@ -30,37 +30,31 @@ class Guru extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Guru & Wali Kelas bisa buat aspirasi
     public function canCreateAspirasi(): bool
     {
         return in_array($this->jabatan, ['Guru', 'Wali Kelas']);
     }
 
-    // Wali Kelas bisa kelola (feedback, progres) aspirasi
     public function canManageAspirasi(): bool
     {
         return $this->jabatan == 'Wali Kelas';
     }
 
-    // Wali Kelas bisa ubah status aspirasi
     public function canChangeStatus(): bool
     {
         return $this->jabatan == 'Wali Kelas';
     }
 
-    // Kepala Sekolah, Wakil, Kepala Jurusan bisa lihat semua aspirasi
     public function canViewAllAspirasi(): bool
     {
         return in_array($this->jabatan, ['Kepala Sekolah', 'Wakil Kepala', 'Kepala Jurusan', 'Wali Kelas']);
     }
 
-    // Kepala Sekolah, Wakil, Kepala Jurusan bisa lihat statistik
     public function canViewStatistik(): bool
     {
         return in_array($this->jabatan, ['Kepala Sekolah', 'Wakil Kepala', 'Kepala Jurusan']);
     }
 
-    // Ambil id_kelas yang diampu Wali Kelas
     public function getKelasId()
     {
         if ($this->jabatan != 'Wali Kelas') return null;

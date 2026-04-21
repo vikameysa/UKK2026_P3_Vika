@@ -19,7 +19,6 @@ class AspirasiController extends Controller
         return Auth::user()->guru;
     }
 
-    // DASHBOARD
     public function dashboard()
     {
         $guru = $this->getGuru();
@@ -74,7 +73,6 @@ class AspirasiController extends Controller
         ));
     }
 
-    // INDEX
     public function index(Request $request)
     {
         $guru = $this->getGuru();
@@ -151,7 +149,6 @@ class AspirasiController extends Controller
         ]);
     }
 
-    // CREATE
     public function create()
     {
         $guru = $this->getGuru();
@@ -167,7 +164,6 @@ class AspirasiController extends Controller
         ]);
     }
 
-    // STORE
     public function store(Request $request)
     {
         $guru = $this->getGuru();
@@ -201,7 +197,6 @@ class AspirasiController extends Controller
         return redirect()->route('guru.aspirasi.index')->with('success', 'Berhasil');
     }
 
-    // DETAIL
     public function detail($id)
     {
         $guru  = $this->getGuru();
@@ -216,7 +211,6 @@ class AspirasiController extends Controller
         return view('guru.aspirasi.detail', compact('guru', 'aspirasi'));
     }
 
-    // FEEDBACK
     public function storeFeedback(Request $request, $id)
     {
         $guru = $this->getGuru();
@@ -236,7 +230,6 @@ class AspirasiController extends Controller
         return back()->with('success', 'Feedback berhasil disimpan.');
     }
 
-    // PROGRES
     public function storeProgres(Request $request, $id)
     {
         $guru = $this->getGuru();
@@ -256,7 +249,6 @@ class AspirasiController extends Controller
         return back()->with('success', 'Progres berhasil ditambahkan.');
     }
 
-    // STATUS
     public function updateStatus(Request $request, $id)
     {
         $guru = $this->getGuru();
@@ -283,7 +275,6 @@ class AspirasiController extends Controller
         return back()->with('success', 'Status berhasil diperbarui.');
     }
 
-    // HISTORY
     public function history(Request $request)
     {
         $guru  = $this->getGuru();
@@ -301,7 +292,6 @@ class AspirasiController extends Controller
             $query->whereDate('created_at', '<=', $request->date_to);
         }
 
-        // Koleksi aspirasi selesai (bukan count) karena blade melakukan @foreach
         $aspirasiSelesai = Aspirasi::with(['kategori', 'ruangan', 'historyStatus.pengubah'])
             ->where('status', 'Selesai')
             ->when($guru->canCreateAspirasi() && !$guru->canManageAspirasi(), function ($q) {
@@ -316,5 +306,40 @@ class AspirasiController extends Controller
             'currentType'     => 'semua',
             'aspirasiSelesai' => $aspirasiSelesai,
         ]);
+    }
+
+    // =====================================================
+    // PRINT PDF - Semua history aspirasi selesai (Guru)
+    // =====================================================
+    public function exportPdf()
+    {
+        $guru = $this->getGuru();
+
+        $aspirasiSelesai = Aspirasi::with(['kategori', 'ruangan', 'user.siswa', 'user.guru'])
+            ->where('status', 'Selesai')
+            ->when($guru->canCreateAspirasi() && !$guru->canManageAspirasi(), function ($q) {
+                $q->where('user_id', Auth::id());
+            })
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        return view('guru.aspirasi.pdf', compact('guru', 'aspirasiSelesai'));
+    }
+
+    // =====================================================
+    // PRINT PDF - Satu aspirasi selesai (Guru)
+    // =====================================================
+    public function exportSinglePdf($id)
+    {
+        $guru  = $this->getGuru();
+        $query = Aspirasi::with(['kategori', 'ruangan', 'historyStatus.pengubah', 'user.siswa', 'user.guru']);
+
+        if ($guru->canCreateAspirasi() && !$guru->canManageAspirasi()) {
+            $query->where('user_id', Auth::id());
+        }
+
+        $aspirasi = $query->where('status', 'Selesai')->findOrFail($id);
+
+        return view('guru.aspirasi.pdf_single', compact('guru', 'aspirasi'));
     }
 }

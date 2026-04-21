@@ -9,7 +9,6 @@
             <form action="{{ route('Jurusan.store') }}" method="POST">
                 @csrf
 
-                {{-- Kode Jurusan --}}
                 <div class="mb-3">
                     <label class="form-label">Kode Jurusan</label>
                     <input type="text" name="kode_jurusan"
@@ -20,7 +19,6 @@
                     @enderror
                 </div>
 
-                {{-- Nama Jurusan --}}
                 <div class="mb-3">
                     <label class="form-label">Nama Jurusan</label>
                     <input type="text" name="nama_jurusan"
@@ -31,7 +29,6 @@
                     @enderror
                 </div>
 
-                {{-- Deskripsi --}}
                 <div class="mb-3">
                     <label class="form-label">Deskripsi</label>
                     <textarea name="deskripsi"
@@ -42,7 +39,6 @@
                     @enderror
                 </div>
 
-                {{-- Tombol --}}
                 <div class="d-flex gap-2 mt-3">
                     <button type="submit" class="btn btn-primary">Simpan</button>
                     <a href="{{ route('Jurusan.jurusan') }}" class="btn btn-secondary">Batal</a>

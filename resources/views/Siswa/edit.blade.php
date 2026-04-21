@@ -67,9 +67,9 @@
                         <div class="col-md-6">
                             <label class="form-label">Foto Saat Ini</label>
                             <div class="mb-3 text-center">
-<img src="{{ $siswa->foto ? asset($siswa->foto) : '' }}"
-     width="120" height="120"
-     style="border-radius:50%; object-fit:cover; border:3px solid #ddd;">
+                            <img src="{{ $siswa->foto ? asset($siswa->foto) : '' }}"
+                                width="120" height="120"
+                                style="border-radius:50%; object-fit:cover; border:3px solid #ddd;">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Ganti Foto</label>

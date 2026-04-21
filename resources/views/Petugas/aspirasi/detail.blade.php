@@ -26,8 +26,7 @@
                     @if($aspirasi->foto)
                     <tr><th>Foto Awal</th><td><img src="{{ asset('storage/' . $aspirasi->foto) }}" width="200" class="img-thumbnail"></td></tr>
                     @endif
-                    
-                    <!-- TAMPILKAN FOTO BUKTI SELESAI -->
+
                     @php
                         $fotoBukti = null;
                         $fotoBuktiKeterangan = null;
@@ -77,7 +76,6 @@
 
 @push('scripts')
 <script>
-    // Preview foto
     document.getElementById('fotoBukti').addEventListener('change', function(e) {
         const preview = document.getElementById('fotoPreview');
         const img = document.getElementById('previewImg');
@@ -93,8 +91,7 @@
             preview.style.display = 'none';
         }
     });
-    
-    // Status change handler
+
     const statusSelect = document.getElementById('statusSelect');
     const warningAlert = document.getElementById('warningAlert');
     const keteranganRequired = document.getElementById('keteranganRequired');

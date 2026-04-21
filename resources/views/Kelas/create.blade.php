@@ -9,7 +9,6 @@
             <form action="{{ route('Kelas.store') }}" method="POST">
                 @csrf
 
-                {{-- Nama Kelas --}}
                 <div class="mb-3">
                     <label class="form-label">Nama Kelas</label>
                     <input type="text" name="nama_kelas"
@@ -17,7 +16,6 @@
                         value="{{ old('nama_kelas') }}">
                 </div>
 
-                {{-- Tingkat --}}
                 <div class="mb-3">
                     <label class="form-label">Tingkat</label>
                     <select name="tingkat" class="form-select">
@@ -28,7 +26,6 @@
                     </select>
                 </div>
 
-                {{-- Jurusan --}}
                 <div class="mb-3">
                     <label class="form-label">Jurusan</label>
                     <select name="id_jurusan" class="form-select">
@@ -43,14 +40,12 @@
                     </select>
                 </div>
 
-                {{-- Kapasitas --}}
                 <div class="mb-3">
                     <label class="form-label">Kapasitas</label>
                     <input type="number" name="kapasitas"
                         class="form-control">
                 </div>
 
-                {{-- Deskripsi --}}
                 <div class="mb-3">
                     <label class="form-label">Deskripsi</label>
                     <textarea name="deskripsi"
@@ -58,7 +53,6 @@
                         rows="3"></textarea>
                 </div>
 
-                {{-- Tombol --}}
                 <div class="d-flex gap-2 mt-3">
                     <button type="submit" class="btn btn-primary">Simpan</button>
                     <a href="{{ route('Kelas.kelas') }}" class="btn btn-secondary">Batal</a>

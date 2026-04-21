@@ -10,7 +10,6 @@
                 @csrf
                 @method('PUT')
 
-                {{-- Nama Kelas --}}
                 <div class="mb-3">
                     <label class="form-label">Nama Kelas</label>
                     <input type="text" name="nama_kelas"
@@ -21,7 +20,6 @@
                     @enderror
                 </div>
 
-                {{-- Tingkat --}}
                 <div class="mb-3">
                     <label class="form-label">Tingkat</label>
                     <select name="tingkat"
@@ -36,7 +34,6 @@
                     @enderror
                 </div>
 
-                {{-- Jurusan --}}
                 <div class="mb-3">
                     <label class="form-label">Jurusan</label>
                     <select name="id_jurusan"
@@ -54,7 +51,6 @@
                     @enderror
                 </div>
 
-                {{-- Kapasitas --}}
                 <div class="mb-3">
                     <label class="form-label">Kapasitas</label>
                     <input type="number" name="kapasitas"
@@ -65,7 +61,6 @@
                     @enderror
                 </div>
 
-                {{-- Deskripsi --}}
                 <div class="mb-3">
                     <label class="form-label">Deskripsi</label>
                     <textarea name="deskripsi"
@@ -76,7 +71,6 @@
                     @enderror
                 </div>
 
-                {{-- Tombol --}}
                 <div class="d-flex gap-2 mt-3">
                     <button type="submit" class="btn btn-primary">Update</button>
                     <a href="{{ route('Kelas.kelas') }}" class="btn btn-secondary">Batal</a>

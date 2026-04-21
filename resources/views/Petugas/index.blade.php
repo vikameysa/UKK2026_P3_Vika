@@ -39,7 +39,6 @@
                             <tr>
                                 <td>{{ $index + 1 }}</td>
 
-                                {{-- FOTO --}}
                                 <td>
                                     <img src="{{ $p->foto ? asset($p->foto) : '' }}"
                                         width="45" height="45"
@@ -62,7 +61,6 @@
                                 <td>
                                     <div class="d-flex gap-2">
 
-                                        {{-- DETAIL --}}
                                         <button type="button"
                                             class="btn btn-outline-primary btn-sm"
                                             data-toggle="modal"
@@ -70,12 +68,10 @@
                                             Detail
                                         </button>
 
-                                        {{-- EDIT --}}
                                         <a href="{{ route('Petugas.edit', $p->id) }}" class="btn btn-outline-warning btn-sm">
                                             Edit
                                         </a>
 
-                                        {{-- DELETE --}}
                                         <form method="POST"
                                             action="{{ route('Petugas.destroy', $p->id) }}">
                                             @csrf
@@ -91,7 +87,6 @@
                                 </td>
                             </tr>
 
-                            {{-- MODAL --}}
                             <div class="modal fade" id="modalPetugas{{ $p->id }}" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">

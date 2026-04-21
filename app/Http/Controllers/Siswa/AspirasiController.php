@@ -71,22 +71,46 @@ class AspirasiController extends Controller
         return view('siswa.aspirasi.detail', compact('aspirasi'));
     }
 
-    public function status()
+    public function status(Request $request)
     {
-        $aspirasi = Aspirasi::with(['kategori', 'ruangan'])
+        $query = Aspirasi::with(['kategori', 'ruangan'])
             ->where('user_id', Auth::id())
-            ->where('status', '!=', 'Selesai')
-            ->orderByRaw("FIELD(status, 'Proses', 'Menunggu')")
+            ->where('status', '!=', 'Selesai');
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('kategori')) {
+            $query->where('id_kategori', $request->kategori);
+        }
+
+        if ($request->filled('ruangan')) {
+            $query->where('id_ruangan', $request->ruangan);
+        }
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        $aspirasi = $query->orderByRaw("FIELD(status, 'Proses', 'Menunggu')")
             ->orderBy('created_at', 'desc')
             ->get();
-        
+
         $statistik = [
-            'total' => $aspirasi->count(),
+            'total'    => $aspirasi->count(),
             'menunggu' => $aspirasi->where('status', 'Menunggu')->count(),
-            'proses' => $aspirasi->where('status', 'Proses')->count(),
+            'proses'   => $aspirasi->where('status', 'Proses')->count(),
         ];
-        
-        return view('siswa.aspirasi.status', compact('aspirasi', 'statistik'));
+
+        $kategoris = Kategori::all();
+        $ruangans  = Ruangan::orderBy('nama_ruangan')->get();
+
+        return view('siswa.aspirasi.status', compact('aspirasi', 'statistik', 'kategoris', 'ruangans'));
     }
 
     public function history()
@@ -124,5 +148,30 @@ class AspirasiController extends Controller
     {
         $siswa = Auth::user()->siswa;
         return view('siswa.profile', compact('siswa'));
+    }
+
+    public function exportPdf()
+    {
+        $siswa = Auth::user();
+
+        $aspirasiSelesai = Aspirasi::with(['kategori', 'ruangan'])
+            ->where('user_id', $siswa->id)
+            ->where('status', 'Selesai')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        return view('siswa.aspirasi.pdf', compact('siswa', 'aspirasiSelesai'));
+    }
+
+    public function exportSinglePdf($id)
+    {
+        $siswa = Auth::user();
+
+        $aspirasi = Aspirasi::with(['kategori', 'ruangan', 'historyStatus.pengubah'])
+            ->where('user_id', $siswa->id)
+            ->where('status', 'Selesai')
+            ->findOrFail($id);
+
+        return view('siswa.aspirasi.pdf_single', compact('siswa', 'aspirasi'));
     }
 }

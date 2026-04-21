@@ -39,18 +39,15 @@ class AdminController extends Controller
         $kategoris = Kategori::all();
         $ruangans  = Ruangan::all();
 
-        // Statistik
         $totalSiswa    = Siswa::count();
         $totalGuru     = Guru::count();
-        $totalAdmin    = Petugas::count(); // ← ganti nama variabel
+        $totalAdmin    = Petugas::count(); 
         $totalAspirasi = Aspirasi::count();
 
-        // Status aspirasi
         $aspirasiMenunggu = Aspirasi::where('status', 'menunggu')->count();
         $aspirasiProses   = Aspirasi::where('status', 'proses')->count();
         $aspirasiSelesai  = Aspirasi::where('status', 'selesai')->count();
 
-        // Grafik per bulan (6 bulan terakhir)
         $bulanLabels = [];
         $bulanData   = [];
         for ($i = 5; $i >= 0; $i--) {

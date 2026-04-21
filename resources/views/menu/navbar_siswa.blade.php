@@ -35,7 +35,12 @@
                 <a href="{{ route('siswa.aspirasi.history') }}" aria-expanded="false">
                     <i class="icon-note menu-icon"></i><span class="nav-text">History Aspirasi</span>
                 </a>
-            </li>      
+            </li> 
+            <li>
+                {{-- <a href="{{ route('siswa.aspirasi.') }}" aria-expanded="false">
+                    <i class="icon-note menu-icon"></i><span class="nav-text">History Aspirasi </span>
+                </a> --}}
+            </li>     
         </ul>
 
     </div>

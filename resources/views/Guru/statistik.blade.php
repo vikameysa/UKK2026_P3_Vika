@@ -11,7 +11,6 @@
                 <small>Data aspirasi per bulan, per kategori, dan per ruangan</small>
             </div>
             <div class="card-body">
-                <!-- Statistik Ringkasan -->
                 <div class="row mb-4">
                     <div class="col-md-3">
                         <div class="card bg-warning text-white">
@@ -47,7 +46,6 @@
                     </div>
                 </div>
                 
-                <!-- Grafik -->
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card">
@@ -165,7 +163,6 @@
         }
     });
     
-    // Grafik Kategori
     new Chart(document.getElementById('chartKategori'), {
         type: 'pie',
         data: {

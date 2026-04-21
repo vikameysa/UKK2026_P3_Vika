@@ -125,7 +125,6 @@ class GuruController extends Controller
             $fotoPath = 'assets/images/guru/' . $namaFile;
         }
 
-        // update guru
         $guru->update([
             'nip'            => $request->nip,
             'nama'           => $request->nama,

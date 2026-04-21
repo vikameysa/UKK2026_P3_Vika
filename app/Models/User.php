@@ -30,49 +30,31 @@ class User extends Authenticatable
         'password',
     ];
 
-    // =====================
-    // RELASI SISWA
-    // =====================
     public function siswa()
     {
         return $this->hasOne(Siswa::class, 'user_id');
     }
 
-    // =====================
-    // RELASI GURU
-    // =====================
     public function guru()
     {
         return $this->hasOne(Guru::class, 'user_id');
     }
 
-    // =====================
-    // RELASI PETUGAS
-    // =====================
     public function petugas()
     {
         return $this->hasOne(Petugas::class, 'user_id');
     }
 
-    // =====================
-    // ASPIRASI
-    // =====================
     public function aspirasi()
     {
         return $this->hasMany(Aspirasi::class, 'user_id');
     }
 
-    // =====================
-    // PROGRES
-    // =====================
     public function progres()
     {
         return $this->hasMany(Progres::class, 'user_id');
     }
 
-    // =====================
-    // HISTORY STATUS
-    // =====================
     public function historyStatus()
     {
         return $this->hasMany(HistoryStatus::class, 'diubah_oleh');
